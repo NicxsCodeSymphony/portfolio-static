@@ -4,7 +4,7 @@ import StarsBg from "@/constants/stars"
 import { useRef } from "react";
 
 const About = () => {
-    const aboutRef = useRef(null);
+    const aboutRef = useRef<HTMLElement>(null);
 
     return (
         <>
@@ -14,7 +14,7 @@ const About = () => {
                 id="about"
                 style={{ fontFamily: 'Marvel, sans-serif' }}
             >
-                <h3 className="text-[#5093C7] text-2xl uppercase tracking-[18px]">About Me</h3>
+                <h3 className="text-[#5093C7] text-lg uppercase tracking-[18px]">About Me</h3>
 
                 <div className="absolute top-0 right-0 w-1/2 h-full">
                     <div className="h-screen flex flex-col justify-center p-20">
