@@ -2,144 +2,96 @@
 
 import Hero from "@/components/Hero";
 import About from "@/components/About";
-import {useRef} from "react";
+import Work from "@/components/Work";
+import {useRef, useState, useEffect} from "react";
 import {useGSAP} from "@gsap/react";
 import gsap from "gsap";
 import {ScrollTrigger} from "gsap/all";
+import { createSectionAnimations } from "@/components/animations/sectionAnimations";
 gsap.registerPlugin(ScrollTrigger);
 
 const Sections = () => {
-
+    const [currentSection, setCurrentSection] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
+    
     const containerRef = useRef<HTMLElement>(null);
     const heroRef = useRef<HTMLDivElement>(null);
     const aboutRef = useRef<HTMLDivElement>(null);
+    const workRef = useRef<HTMLDivElement>(null)
+
+    const sections = [
+        { ref: heroRef, name: 'hero' },
+        { ref: aboutRef, name: 'about' },
+        {ref: workRef, name: 'work'}
+    ];
+
+    const { navigateToSection: animateToSection, initializeAnimations } = createSectionAnimations();
+
+    const navigateToSection = (sectionIndex: number) => {
+        if (isAnimating || sectionIndex < 0 || sectionIndex >= sections.length) return;
+        
+        setIsAnimating(true);
+        setCurrentSection(sectionIndex);
+        
+        const elements = {
+            heroGlassContainer: heroRef.current?.querySelector('.glass-text-container') || null,
+            heroParagraph: heroRef.current?.querySelector('p') || null,
+            heroButtons: heroRef.current?.querySelector('.flex.gap-6') || null,
+            aboutTitle: aboutRef.current?.querySelector('h3') || null,
+            aboutLeftContent: aboutRef.current?.querySelector('.left-content') || null,
+            aboutStatItems: aboutRef.current?.querySelectorAll('.stat-item') || null,
+            workTitle: workRef.current?.querySelector('h1') || null,
+            heroRef: heroRef.current,
+            aboutRef: aboutRef.current,
+            workRef: workRef.current
+        };
+        
+        animateToSection(currentSection, sectionIndex, elements, () => {
+            setIsAnimating(false);
+        });
+    };
+
+    const handleWheel = (e: WheelEvent) => {
+        e.preventDefault();
+        
+        if (isAnimating) return;
+        
+        if (e.deltaY > 0) {
+            // Scroll down - go to next section
+            navigateToSection(currentSection + 1);
+        } else {
+            // Scroll up - go to previous section
+            navigateToSection(currentSection - 1);
+        }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (isAnimating) return;
+        
+        if (e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault();
+            navigateToSection(currentSection + 1);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            navigateToSection(currentSection - 1);
+        }
+    };
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        container.addEventListener('wheel', handleWheel, { passive: false });
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            container.removeEventListener('wheel', handleWheel);
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [currentSection, isAnimating]);
 
     useGSAP(() => {
-        if (!heroRef.current || !aboutRef.current) return;
-        
-        // Initial setup
-        gsap.set(aboutRef.current, { 
-            opacity: 0,
-            backgroundColor: "#0A0A0A"
-        });
-        
-        // Set initial state for About section elements
-        gsap.set(aboutRef.current.querySelector('.left-content'), {
-            x: 50,
-            opacity: 0,
-            yPercent: 20
-        });
-        
-        gsap.set(aboutRef.current.querySelectorAll('.stat-item'), {
-            opacity: 0,
-            scaleY: 0,
-            transformOrigin: "top center"
-        });
-        
-        gsap.set(aboutRef.current.querySelector('h3'), {
-            opacity: 0,
-            y: -30
-        });
-        
-        const tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: "top top",
-                end: "+=2000",
-                scrub: 1,
-                pin: true,
-                anticipatePin: 1
-            }
-        });
-
-        // Hero section fade out animations
-        tl.to(heroRef.current.querySelector('.glass-text-container'), {
-            y: -80,
-            opacity: 0,
-            scale: 0.9,
-            duration: 2,
-            ease: "power3.in"
-        })
-        .to(heroRef.current.querySelector('p'), {
-            y: -40,
-            opacity: 0,
-            scale: 0.95,
-            duration: 2,
-            ease: "power2.in"
-        }, "-=1.5")
-        .to(heroRef.current.querySelector('.flex.gap-6'), {
-            y: -20,
-            opacity: 0,
-            scale: 0.95,
-            duration: 2,
-            ease: "power2.in"
-        }, "-=1.5")
-        .to(heroRef.current, {
-            opacity: 0,
-            duration: 1
-        }, "-=1")
-        
-        // About section fade in
-        .to(aboutRef.current, {
-            opacity: 1,
-            duration: 1
-        }, "-=0.5")
-        
-        // About section title animation
-        .to(aboutRef.current.querySelector('h3'), {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power2.out"
-        }, "-=0.5")
-        
-        // About section content animation
-        .to(aboutRef.current.querySelector('.left-content'), {
-            x: 0,
-            opacity: 1,
-            yPercent: 0,
-            duration: 1.5,
-            ease: "power2.out"
-        }, "-=0.3")
-        
-        // Stats animation
-        .to(aboutRef.current.querySelectorAll('.stat-item'), {
-            opacity: 1,
-            scaleY: 1,
-            duration: 0.8,
-            ease: "power2.out",
-            stagger: 0.15
-        }, "-=0.5")
-        
-        // Hold the About section for a moment
-        .to({}, { duration: 1 })
-        
-        // About section fade out (for smooth transition to next section)
-        .to(aboutRef.current.querySelector('.left-content'), {
-            x: -50,
-            opacity: 0,
-            yPercent: -20,
-            duration: 1.5,
-            ease: "power2.in"
-        })
-        .to(aboutRef.current.querySelectorAll('.stat-item'), {
-            opacity: 0,
-            scaleY: 0,
-            duration: 0.8,
-            ease: "power2.in",
-            stagger: 0.1
-        }, "-=1.2")
-        .to(aboutRef.current.querySelector('h3'), {
-            opacity: 0,
-            y: 30,
-            duration: 1,
-            ease: "power2.in"
-        }, "-=1")
-        .to(aboutRef.current, {
-            opacity: 0,
-            duration: 1
-        }, "-=0.5");
-
+        initializeAnimations(heroRef.current, aboutRef.current, workRef.current);
     }, [])
 
     return(
@@ -150,9 +102,27 @@ const Sections = () => {
             <div ref={aboutRef} className="absolute inset-0">
                 <About />
             </div>
+            <div ref={workRef} className="absolute inset-0">
+                <Work />
+            </div>
+            <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-50">
+                <div className="flex flex-col gap-2">
+                    {sections.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => navigateToSection(index)}
+                            disabled={isAnimating}
+                            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                                currentSection === index 
+                                    ? 'bg-white scale-125' 
+                                    : 'bg-white/30 hover:bg-white/50'
+                            }`}
+                        />
+                    ))}
+                </div>
+            </div>
         </section>
     )
-
 }
 
 export default Sections
