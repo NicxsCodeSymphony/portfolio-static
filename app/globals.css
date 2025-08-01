@@ -48,3 +48,62 @@ html::-webkit-scrollbar {
   transform: scale(1);
   opacity: 1;
 }
+
+.scrollable {
+  overflow-y: auto;
+}
+
+/* Enable scrolling for expanded overlay */
+.expanded-overlay {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  height: 300vh !important;
+  max-height: 300vh !important;
+  scroll-behavior: smooth !important;
+}
+
+.expanded-overlay::-webkit-scrollbar {
+  width: 8px !important;
+  display: block !important;
+}
+
+.expanded-overlay::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.expanded-overlay::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-radius: 4px !important;
+}
+
+.expanded-overlay::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Force enable scrolling for the expanded overlay container */
+.expanded-overlay-container {
+  overflow: visible !important;
+  height: 300vh !important;
+}
+
+.expanded-overlay-container .expanded-overlay {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  height: 300vh !important;
+  max-height: 300vh !important;
+}
+
+/* Override global scrollbar hiding for expanded overlay */
+.expanded-overlay-container,
+.expanded-overlay-container * {
+  scrollbar-width: auto !important;
+  -ms-overflow-style: auto !important;
+}
+
+.expanded-overlay-container::-webkit-scrollbar,
+.expanded-overlay::-webkit-scrollbar {
+  display: block !important;
+  width: 8px !important;
+}
