@@ -7,11 +7,12 @@ import Loading from '@/components/ui/Loading'
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Services from "@/components/Services";
+import Project from "@/components/Project";
 import Work from "@/components/Work";
 
 const Home = () => {
 
-    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const handleLoadingComplete = () => {
         setIsLoading(false)
@@ -27,6 +28,7 @@ const Home = () => {
                     <Hero />
                     <About />
                     <Services />
+                    <Project />
                     <Work />
                     </>
                 )}
