@@ -1,20 +1,37 @@
-"use client"
+'use client'
 
-import gsap from "gsap";
-import {ScrollTrigger, SplitText} from "gsap/all";
+import {useState} from "react";
+import ReactLenis from 'lenis/react'
 
-import Navbar from "@/components/Navbar";
-import Section from "@/components/Section";
-gsap.registerPlugin(ScrollTrigger, SplitText)
+import Loading from '@/components/ui/Loading'
+import Hero from "@/components/Hero";
+import About from "@/components/About";
+import Work from "@/components/Work";
 
 const Home = () => {
 
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const handleLoadingComplete = () => {
+        setIsLoading(false)
+    }
+
     return(
-        <main>
-            <Navbar />
-           <Section />
-        </main>
+        <ReactLenis root>
+            <main>
+                {isLoading ? (
+                    <Loading onComplete={handleLoadingComplete} />
+                ) : (
+                    <>
+                    <Hero />
+                    <About />
+                    <Work />
+                    </>
+                )}
+            </main>
+        </ReactLenis>
     )
+
 }
 
 export default Home

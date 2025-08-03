@@ -1,8 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500&display=swap');
-
-
 @import "tailwindcss";
-@import "@fontsource/marvel";
 
 :root {
   --background: #ffffff;
@@ -12,6 +8,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,85 +23,4 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  overflow: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-body::-webkit-scrollbar {
-  display: none;
-}
-
-html {
-  overflow: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-html::-webkit-scrollbar {
-  display: none;
-}
-
-.swiper-slide-visible {
-  transform: scale(1);
-  opacity: 1;
-}
-
-.scrollable {
-  overflow-y: auto;
-}
-
-/* Enable scrolling for expanded overlay */
-.expanded-overlay {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch !important;
-  height: 300vh !important;
-  max-height: 300vh !important;
-  scroll-behavior: smooth !important;
-}
-
-.expanded-overlay::-webkit-scrollbar {
-  width: 8px !important;
-  display: block !important;
-}
-
-.expanded-overlay::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1) !important;
-}
-
-.expanded-overlay::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3) !important;
-  border-radius: 4px !important;
-}
-
-.expanded-overlay::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5) !important;
-}
-
-/* Force enable scrolling for the expanded overlay container */
-.expanded-overlay-container {
-  overflow: visible !important;
-  height: 300vh !important;
-}
-
-.expanded-overlay-container .expanded-overlay {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch !important;
-  height: 300vh !important;
-  max-height: 300vh !important;
-}
-
-/* Override global scrollbar hiding for expanded overlay */
-.expanded-overlay-container,
-.expanded-overlay-container * {
-  scrollbar-width: auto !important;
-  -ms-overflow-style: auto !important;
-}
-
-.expanded-overlay-container::-webkit-scrollbar,
-.expanded-overlay::-webkit-scrollbar {
-  display: block !important;
-  width: 8px !important;
 }

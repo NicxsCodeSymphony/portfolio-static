@@ -1,194 +1,103 @@
-"use client"
-
-import StarsBg from "@/constants/stars";
-import "../styles/Hero.css"
-import {useRef} from "react";
-import {useGSAP} from "@gsap/react";
+"use client";
 import gsap from "gsap";
-import { useMediaQuery } from "react-responsive";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import Image from "next/image";
+import TechMarquee from "./ui/marquee";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".wrapper",
+        start: "top top",
+        end: "+=500%",
+        pin: true,
+        scrub: true,
+      },
+    });
 
-    const titleRef = useRef<HTMLDivElement>(null);
-    const subtitleRef = useRef<HTMLParagraphElement>(null);
-    const buttonsRef = useRef<HTMLDivElement>(null);
-    const foldRef = useRef<HTMLDivElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    // Responsive breakpoints
-    const isMobile = useMediaQuery({ maxWidth: 767 });
-    const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1023 });
-    const isDesktop = useMediaQuery({ minWidth: 1024 });
-    const isLargeDesktop = useMediaQuery({ minWidth: 1440 });
-
-    useGSAP(() => {
-        const tl = gsap.timeline({delay: 0.3});
-
-        tl.fromTo(titleRef.current,
-            { y: 80, opacity: 0, scale: 0.9 },
-            { y: 0, opacity: 1, scale: 1, duration: 1.5, ease: "power3.out" }
-        )
-        .fromTo(subtitleRef.current,
-            { y: 40, opacity: 0, scale: 0.95 },
-            { y: 0, opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" },
-            "-=0.8"
-        )
-        .fromTo(buttonsRef.current,
-            { y: 20, opacity: 0, scale: 0.95 },
-            { y: 0, opacity: 1, scale: 1, duration: 1, ease: "power2.out" },
-            "-=0.6"
-        );
-
-        gsap.set(containerRef.current, { opacity: 1 });
-
-        const titleElement = titleRef.current;
-        if (titleElement) {
-            titleElement.addEventListener('mouseenter', () => {
-                gsap.to(titleElement, { scale: 1.02, duration: 0.3 });
-            });
-            
-            titleElement.addEventListener('mouseleave', () => {
-                gsap.to(titleElement, { scale: 1, duration: 0.3 });
-            });
+    tl
+      .fromTo(
+        ".yeah",
+        {
+          scale: 5,
+          z: 0,
+        },
+        {
+          scale: 1,
+          z: 0,
+          transformOrigin: "center center",
+          ease: "power1.inOut",
+          duration: 3,
         }
+      )
+      .to(
+        ".content",
+        {
+          opacity: 0,
+          scale: 0.8,
+          ease: "power1.inOut",
+          duration: 1,
+        },
+        1
+      )
+      .fromTo(
+        ".video-frame",
+        {
+          opacity: 0,
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          ease: "power2.out",
+          duration: 1.5,
+        },
+        1
+      );
+  }, []);
 
-        const buttons = buttonsRef.current?.querySelectorAll('button');
-        if (buttons) {
-            buttons.forEach((button: Element) => {
-                button.addEventListener('mouseenter', () => {
-                    gsap.to(button, { 
-                        scale: 1.05, 
-                        y: -3, 
-                        duration: 0.3,
-                        boxShadow: "0 20px 40px rgba(255, 255, 255, 0.2)"
-                    });
-                });
-                
-                button.addEventListener('mouseleave', () => {
-                    gsap.to(button, { 
-                        scale: 1, 
-                        y: 0, 
-                        duration: 0.3,
-                        boxShadow: "0 0 0 rgba(255, 255, 255, 0)"
-                    });
-                });
-            });
-        }
+  return (
+    <>
+      <section className="wrapper relative">
+        <div className="relative w-full h-screen z-20">
+          <Image src="/sample.jpg" alt="hero" fill className="object-cover yeah" />
 
-        return () => {
-            tl.kill();
-            if (titleElement) {
-                titleElement.removeEventListener('mouseenter', () => {});
-                titleElement.removeEventListener('mouseleave', () => {});
-            }
-            if (buttons) {
-                buttons.forEach((button: Element) => {
-                    button.removeEventListener('mouseenter', () => {});
-                    button.removeEventListener('mouseleave', () => {});
-                });
-            }
-        };
-    }, []);
-
-    return(
-        <div
-            ref={containerRef}
-            className="relative w-full h-screen overflow-hidden bg-[#0A0A0A]"
-            style={{ opacity: 0 }}
-        >
-            <StarsBg />
-
-            <div className="relative z-10 flex items-center justify-center h-full">
-                <div className={`text-center ${
-                    isMobile 
-                        ? "space-y-6 px-4" 
-                        : isTablet 
-                        ? "space-y-8 px-8" 
-                        : "space-y-10 px-12"
-                }`}>
-                    <div
-                        ref={titleRef}
-                        className="relative cursor-pointer"
-                    >
-                        <div className={`glass-text-container ${
-                            isMobile 
-                                ? "scale-75" 
-                                : isTablet 
-                                ? "scale-90" 
-                                : "scale-100"
-                        }`}>
-                            <h1 className="glass-text-main">JOHN NICO EDISAN</h1>
-                            <h1 className="glass-text-reflection">JOHN NICO EDISAN</h1>
-                        </div>
-                    </div>
-
-                    <p 
-                        ref={subtitleRef}
-                        className={`max-w-3xl mx-auto leading-relaxed font-light tracking-wide text-white ${
-                            isMobile 
-                                ? "text-lg px-4" 
-                                : isTablet 
-                                ? "text-xl px-6" 
-                                : isLargeDesktop 
-                                ? "text-3xl" 
-                                : "text-2xl"
-                        }`}
-                        style={{fontFamily: 'Marvel, sans-serif'}}
-                    >
-                        Website and Mobile Application Developer
-                    </p>
-
-                    <div ref={buttonsRef} className={`flex justify-center ${
-                        isMobile 
-                            ? "flex-col gap-4 px-4" 
-                            : isTablet 
-                            ? "flex-row gap-4" 
-                            : "flex-row gap-6"
-                    }`}>
-                        <button
-                            className={`backdrop-blur-md border rounded-2xl font-semibold shadow-2xl transition-all duration-300 bg-white/10 border-white/20 text-white hover:shadow-white/20 ${
-                                isMobile 
-                                    ? "px-6 py-4 text-sm" 
-                                    : isTablet 
-                                    ? "px-8 py-4 text-base" 
-                                    : isLargeDesktop 
-                                    ? "px-12 py-6 text-lg" 
-                                    : "px-10 py-5 text-base"
-                            }`}
-                            onClick={() => {
-                                const link = document.createElement('a');
-                                link.href = "/resume.pdf";
-                                link.download = 'John_Nico_Edisan_Resume.pdf';
-                                link.click();
-                            }}
-                        >
-                            Download Resume
-                        </button>
-
-                        <button
-                            className={`backdrop-blur-md border rounded-2xl font-semibold shadow-2xl transition-all duration-300 bg-white/10 border-white/20 text-white hover:shadow-white/20 ${
-                                isMobile 
-                                    ? "px-6 py-4 text-sm" 
-                                    : isTablet 
-                                    ? "px-8 py-4 text-base" 
-                                    : isLargeDesktop 
-                                    ? "px-12 py-6 text-lg" 
-                                    : "px-10 py-5 text-base"
-                            }`}
-                            onClick={() => {
-                                const link = document.createElement('a');
-                                link.href = '/cv.pdf';
-                                link.download = 'John_Nico_Edisan_CV.pdf';
-                                link.click();
-                            }}
-                        >
-                            Download CV
-                        </button>
-                    </div>
-                </div>
-            </div>
+          <div className="absolute top-[22%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center xl:w-[42%] z-10 content">
+            <h1 className="text-2xl md:text-5xl" style={{ fontFamily: "Inter, sans-serif" }}>
+            I deliver reliable, user-friendly websites and apps for real needs.
+            </h1>
+            <p
+              className="mt-8 text-xs uppercase tracking-widest text-slate-300"
+              style={{ fontFamily: "Courier New" }}
+            >
+              Tech Stacks
+            </p>
+            <TechMarquee />
+          </div>
         </div>
-    );
+
+        {/* Iframe container */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-black text-2xl font-bold z-30">
+          <iframe
+            src="https://www.youtube.com/embed/bAkNOmAlyLk?si=SJuT3NKl9Di4hzXI"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+            className="video-frame transition-transform duration-300 w-[60vw] h-[34vw] max-w-[960px] max-h-[540px]"
+            style={{
+              transform: "scale(0)",
+              opacity: 0,
+            }}
+          ></iframe>
+        </div>
+      </section>
+    </>
+  );
 };
 
 export default Hero;
