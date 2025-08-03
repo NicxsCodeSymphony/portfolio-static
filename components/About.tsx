@@ -46,7 +46,7 @@ const About = () => {
                     toggleActions: "play none none reverse",
                 },
             }).to(containerRef1.current, {
-                backgroundColor: "#F9F9F7",
+                backgroundColor: "#F7F3ED",
                 color: "#000000",
                 duration: 0.3,
                 ease: "power2.out",
@@ -104,7 +104,7 @@ const About = () => {
                 ref={containerRef}
                 className="min-h-screen pt-32 md:pt-64 bg-[#F9F9F7] about-section transition-colors duration-1000"
             >
-                <div className="text-[2rem] md:text-[5rem] lg:text-[8rem] leading-tight md:leading-[8rem] w-[95%] p-4 md:p-8 space-y-6">
+                <div className="text-[2rem] md:text-[5rem] 2xl:text-[8rem] leading-tight md:leading-[8rem] w-[95%] p-4 md:p-8 space-y-6">
                     <h2 ref={firstTextRef}>
                         I create elevating digital experiences that inspire and connect with people through development and design
                     </h2>
