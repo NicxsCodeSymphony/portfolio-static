@@ -10,7 +10,7 @@ import Work from "@/components/Work";
 
 const Home = () => {
 
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
 
     const handleLoadingComplete = () => {
         setIsLoading(false)

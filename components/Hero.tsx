@@ -4,11 +4,29 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import TechMarquee from "./ui/marquee";
+import {useEffect, useRef} from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
+
+    const overlayRef = useRef<HTMLDivElement>(null);
+
+
   useGSAP(() => {
+
+      gsap.fromTo(
+          overlayRef.current,
+          { scaleY: 1 },
+          {
+              scaleY: 0,
+              transformOrigin: "top center",
+              duration: 1.2,
+              ease: "power4.out",
+              delay: 0.2,
+          }
+      );
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: ".wrapper",
@@ -61,7 +79,15 @@ const Hero = () => {
 
   return (
     <>
-      <section className="wrapper relative">
+
+        <div
+            className="absolute top-0 left-0 w-full h-full bg-[#EFF2E8] z-40"
+            ref={overlayRef}
+            style={{ transform: "scaleY(1)", transformOrigin: "top center" }}
+        ></div>
+
+
+        <section className="wrapper relative">
         <div className="relative w-full h-screen z-20">
           <Image src="/sample.jpg" alt="hero" fill className="object-cover yeah" />
 
