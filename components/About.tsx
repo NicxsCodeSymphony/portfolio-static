@@ -4,133 +4,107 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Image from "next/image";
+import { useMediaQuery } from "react-responsive";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const About = () => {
+    const isMobile = useMediaQuery({ maxWidth: 768 });
+    const isTablet = useMediaQuery({ minWidth: 769, maxWidth: 1024 });
+
     const containerRef = useRef(null);
     const firstTextRef = useRef<HTMLDivElement>(null);
     const containerRef1 = useRef<HTMLDivElement>(null);
 
-    // 🔹 New Refs for animation targets
     const imageRef = useRef<HTMLDivElement>(null);
     const textRef2 = useRef<HTMLDivElement>(null);
-
-    const sectionTitleRef = useRef<HTMLDivElement>(null)
+    const sectionTitleRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        // Section 1 background change
-        gsap.timeline({
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: "top bottom",
-                end: "bottom 60%",
-                toggleActions: "play none none reverse",
-            },
-        }).to(containerRef.current, {
-            backgroundColor: "#1a1a1a",
-            color: "#ffffff",
-            duration: 0,
-            ease: "power2.out",
-        });
+        const ctx = gsap.context(() => {
+            // Background transition for first section
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: "top bottom",
+                    end: "bottom 60%",
+                    toggleActions: "play none none reverse",
+                },
+            }).to(containerRef.current, {
+                backgroundColor: "#1a1a1a",
+                color: "#ffffff",
+                duration: 0.3,
+                ease: "power2.out",
+            });
 
-        // Section 2 background change
-        gsap.timeline({
-            scrollTrigger: {
-                trigger: containerRef1.current,
-                start: "top 80%",
-                end: "bottom 60%",
-                toggleActions: "play none none reverse",
-            },
-        }).to(containerRef1.current, {
-            backgroundColor: "#F9F9F7",
-            color: "#000000",
-            duration: 0,
-            ease: "power2.out",
-        });
+            // Background transition for second section
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: containerRef1.current,
+                    start: "top 80%",
+                    end: "bottom 60%",
+                    toggleActions: "play none none reverse",
+                },
+            }).to(containerRef1.current, {
+                backgroundColor: "#F9F9F7",
+                color: "#000000",
+                duration: 0.3,
+                ease: "power2.out",
+            });
 
-        // Animate "ABOUT ME" heading (in and out)
-        ScrollTrigger.create({
-            trigger: containerRef1.current,
-            start: "top 90%",
-            onEnter: () => {
-                gsap.fromTo(
-                    ".about-heading",
+            // Combined animations for section title, image, and text
+            gsap.timeline({
+                scrollTrigger: {
+                    trigger: containerRef1.current,
+                    start: "top 85%",
+                    end: "bottom 60%",
+                    toggleActions: "play none none reverse",
+                },
+            })
+                .fromTo(
+                    sectionTitleRef.current,
                     { y: 100, opacity: 0 },
                     {
                         y: 0,
                         opacity: 1,
                         duration: 1,
                         ease: "power3.out",
-                    }
-                );
-            },
-            onLeaveBack: () => {
-                gsap.to(".about-heading", {
-                    y: 100,
-                    opacity: 0,
-                    duration: 0.6,
-                    ease: "power3.in",
-                });
-            },
-        });
-
-        ScrollTrigger.create({
-            trigger: containerRef1.current,
-            start: "top 90%",
-            onEnter: () => {
-                gsap.fromTo(
-                    [imageRef.current, sectionTitleRef.current],
-                    {y: 100, opacity: 0 },
-                    {
-                        y: 0,
-                        opacity: 1,
-                        duration: 1,
-                        stagger: 0.3,
-                        ease: "power3.out"
                     }
                 )
-            }
-        })
-
-        // Animate image and text (in and out)
-        ScrollTrigger.create({
-            trigger: containerRef1.current,
-            start: "top 85%",
-            onEnter: () => {
-                gsap.fromTo(
-                    [imageRef.current, textRef2.current],
+                .fromTo(
+                    imageRef.current,
                     { y: 100, opacity: 0 },
                     {
                         y: 0,
                         opacity: 1,
                         duration: 1,
-                        stagger: 0.3,
                         ease: "power3.out",
-                    }
+                    },
+                    "-=0.7"
+                )
+                .fromTo(
+                    textRef2.current,
+                    { y: 100, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 1,
+                        ease: "power3.out",
+                    },
+                    "-=0.7"
                 );
-            },
-            onLeaveBack: () => {
-                gsap.to([imageRef.current, textRef2.current, sectionTitleRef.current], {
-                    y: 100,
-                    opacity: 0,
-                    duration: 0.6,
-                    stagger: 0.2,
-                    ease: "power3.in",
-                });
-            },
         });
+
+        return () => ctx.revert(); // cleanup
     }, []);
-
-
 
     return (
         <>
             <section
                 ref={containerRef}
-                className="h-screen pt-64 bg-[#F9F9F7] about-section transition-colors duration-1000"
+                className="min-h-screen pt-32 md:pt-64 bg-[#F9F9F7] about-section transition-colors duration-1000"
             >
-                <div className="text-[8rem] leading-[10rem] w-[98%] space-y-6 p-8 first">
+                <div className="text-[2rem] md:text-[5rem] lg:text-[8rem] leading-tight md:leading-[8rem] w-[95%] p-4 md:p-8 space-y-6">
                     <h2 ref={firstTextRef}>
                         I create elevating digital experiences that inspire and connect with people through development and design
                     </h2>
@@ -139,17 +113,19 @@ const About = () => {
 
             <section
                 ref={containerRef1}
-                className="h-[150vh] bg-[#1a1a1a] text-[#ffffff] transition-colors duration-1000"
+                className="min-h-[100vh] bg-[#1a1a1a] text-[#ffffff] transition-colors duration-1000"
             >
-                <div className="px-8 lg:px-64 py-48">
-                    <h1 className="about-heading text-6xl font-bold text-center text-[#7F8166] text-[6rem]" ref={sectionTitleRef}>ABOUT ME</h1>
+                <div className="px-4 md:px-20 2xl:px-64 py-20 md:py-48">
+                    <h1
+                        className="about-heading text-4xl md:text-5xl lg:text-[6rem] font-bold text-center text-[#7F8166]"
+                        ref={sectionTitleRef}
+                    >
+                        ABOUT ME
+                    </h1>
 
-                    <div className="flex gap-20 h-[65vh] relative mt-24">
+                    <div className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-10 md:gap-20 relative mt-16 md:mt-24`}>
                         {/* IMAGE CONTAINER */}
-                        <div
-                            ref={imageRef}
-                            className="relative h-full w-full"
-                        >
+                        <div ref={imageRef} className="relative h-64 md:h-[65vh] w-full">
                             <Image
                                 src="/sample.jpg"
                                 alt="sample"
@@ -161,18 +137,16 @@ const About = () => {
                         {/* STICKY TEXT */}
                         <div
                             ref={textRef2}
-                            className="w-full sticky top-32 self-start"
+                            className={`w-full ${isMobile ? "static" : "sticky top-32"} self-start`}
                         >
-                            <h2 className="text-4xl font-bold">A brief Intro, who am I?</h2>
-
-                            <div className="text-xl">
-                                <p className="mt-7">
+                            <h2 className="text-2xl md:text-4xl font-bold mb-4">A brief Intro, who am I?</h2>
+                            <div className="text-base md:text-xl space-y-5">
+                                <p>
                                     Hi, I&apos;m a fresh graduate and full-stack developer based in Bogo City, Cebu,
                                     Philippines. I&apos;m passionate about building web and application products that
-                                    solve real problems and create meaningful user experiences. As a developer, I
-                                    enjoy turning ideas into functional and visually engaging digital solutions.
+                                    solve real problems and create meaningful user experiences.
                                 </p>
-                                <p className="mt-7">
+                                <p>
                                     When I&apos;m not coding, you&apos;ll often find me immersed in music—listening,
                                     creating, and exploring new sounds. Music is my creative outlet and a big part of
                                     how I unwind and stay inspired.

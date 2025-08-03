@@ -6,6 +6,7 @@ import ReactLenis from 'lenis/react'
 import Loading from '@/components/ui/Loading'
 import Hero from "@/components/Hero";
 import About from "@/components/About";
+import Services from "@/components/Services";
 import Work from "@/components/Work";
 
 const Home = () => {
@@ -25,6 +26,7 @@ const Home = () => {
                     <>
                     <Hero />
                     <About />
+                    <Services />
                     <Work />
                     </>
                 )}
