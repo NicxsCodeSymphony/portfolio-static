@@ -9,6 +9,7 @@ import { FaArrowRight } from "react-icons/fa6";
 import projectData from "@/constant/projectData";
 import { useRouter } from "next/navigation";
 import ProjectModal from "@/components/modal/ProjectModal";
+import Navbar from "@/components/Navbar";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -106,6 +107,7 @@ const Project = () => {
             className="min-h-screen bg-[#F7F3ED] py-10 2xl:py-40 relative overflow-hidden"
             ref={containerRef}
         >
+            <Navbar />
             {/* Custom Cursor */}
             <div
                 ref={cursorRef}

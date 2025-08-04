@@ -1,7 +1,7 @@
 const projectData = [
     {
         title: "JourneyTrail: Onboard Bus Ticketing and Management System",
-        tags: ["Web & App", "Dashboard"],
+        tags: ["Web App", "Mobile App"],
         image: "/cp3.jpg",
         techStack: {
             frontend: [
@@ -19,23 +19,11 @@ const projectData = [
                 { name: "Vercel", width: "50%" }
             ]
         },
-        secondWork: {
-            title: "MOBILE APP DEVELOPMENT",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            features: [
-                "Cross-platform compatibility",
-                "Real-time data synchronization",
-                "Offline functionality",
-                "Push notifications",
-                "User authentication",
-                "Payment integration"
-            ],
-            images: ["/sample.jpg", "/sample.jpg", "/sample.jpg"]
-        }
+        images: ["/cp1.jpg", "/cp2.jpg", "/cp3.jpg"]
     },
     {
         title: "CampusConnect: Student Social Network Platform",
-        tags: ["Social", "Messaging"],
+        tags: ["Mobile App", "Social Platform"],
         image: "/cp2.jpg",
         techStack: {
             frontend: [
@@ -54,23 +42,12 @@ const projectData = [
                 { name: "GitHub", width: "80%" }
             ]
         },
-        secondWork: {
-            title: "SOCIAL NETWORKING PLATFORM",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            features: [
-                "Real-time messaging",
-                "User profiles and connections",
-                "Content sharing",
-                "Privacy controls",
-                "Mobile responsive design",
-                "Analytics dashboard"
-            ],
-            images: ["/sample.jpg", "/sample.jpg", "/sample.jpg"]
-        }
+      
+        images: ["/cp2.jpg", "/cp3.jpg", "/cp1.jpg"]
     },
     {
         title: "CRMC Website",
-        tags: ["Web Application", "Dashboard", "Education"],
+        tags: ["Website", "Dashboard", "Education"],
         image: "/cp1.jpg",
         techStack: {
             frontend: [
@@ -100,13 +77,13 @@ const projectData = [
                 "Parent portal",
                 "Reporting tools"
             ],
-            images: ["/sample.jpg", "/sample.jpg", "/sample.jpg"]
+            images: ["/cp1.jpg", "/cp1.jpg", "/cp2.jpg"]
         }
     },
     {
         title: "DevPortfolio: Interactive Developer Portfolio",
-        tags: ["Personal", "React/Next.js"],
-        image: "/sample.jpg",
+        tags: ["Web App", "Personal", "React/Next.js"],
+        image: "/cp1",
         techStack: {
             frontend: [
                 { name: "Next.js", width: "80%" },
@@ -124,19 +101,7 @@ const projectData = [
                 { name: "TypeScript", width: "70%" }
             ]
         },
-        secondWork: {
-            title: "INTERACTIVE PORTFOLIO DESIGN",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            features: [
-                "Smooth animations",
-                "Interactive elements",
-                "Responsive design",
-                "Project showcase",
-                "Contact integration",
-                "Performance optimization"
-            ],
-            images: ["/sample.jpg", "/sample.jpg", "/sample.jpg"]
-        }
+        images: ["/cp1.jpg", "/cp3.jpg", "/cp2.jpg"]
     },
 ];
 
