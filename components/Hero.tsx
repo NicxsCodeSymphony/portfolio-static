@@ -1,20 +1,20 @@
+// components/Hero.tsx
 "use client";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import TechMarquee from "./ui/marquee";
-import {useRef} from "react";
+import { useRef } from "react";
+import VideoFrame from "@/components/ui/youtube";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
-
     const overlayRef = useRef<HTMLDivElement>(null);
-
+    const videoFrameRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-
         gsap.fromTo(
             overlayRef.current,
             { scaleY: 1 },
@@ -33,70 +33,51 @@ const Hero = () => {
                 start: "top top",
                 end: "+=500%",
                 pin: true,
-                scrub: true,
+                scrub: 1.2,
             },
         });
 
         tl
-            .fromTo(
-                ".yeah",
-                {
-                    scale: 5,
-                    z: 0,
-                },
-                {
-                    scale: 1,
-                    z: 0,
-                    transformOrigin: "center center",
-                    ease: "power1.inOut",
-                    duration: 3,
-                }
-            )
-            .to(
-                ".content",
-                {
-                    opacity: 0,
-                    scale: 0.8,
-                    ease: "power1.inOut",
-                    duration: 1,
-                },
-                1
-            )
-            .fromTo(
-                ".video-frame",
-                {
-                    opacity: 0,
-                },
-                {
-                    opacity: 1,
-                    scale: 1,
-                    ease: "power2.out",
-                    duration: 1.5,
-                },
-                1
-            );
+            .fromTo(".yeah", { scale: 5, z: 0 }, { scale: 1, z: 0, transformOrigin: "center center", ease: "power2.inOut", duration: 3 })
+            .to(".content", { opacity: 0, scale: 0.8, y: -50, ease: "power2.inOut", duration: 1.2 }, 1.5)
+            .fromTo(".video-container", { opacity: 0, scale: 0.3, rotationY: -15, y: 100 }, { opacity: 1, scale: 1, rotationY: 0, y: 0, ease: "back.out(1.2)", duration: 2 }, 2)
+            .fromTo(".video-glow", { opacity: 0, scale: 0.8 }, { opacity: 0.6, scale: 1.1, ease: "power2.out", duration: 1.5 }, 2.5)
+            .fromTo(".video-frame", { scale: 0.95, opacity: 0.8 }, { scale: 1, opacity: 1, ease: "power2.out", duration: 1 }, 3);
+
+
+        gsap.to(".horizontal-wrapper", {
+            xPercent: -300, // Scroll through 4 panels (0 to -300%)
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#about",
+                start: "top top",
+                end: () => "+=" + document.querySelector(".horizontal-wrapper")!.scrollWidth,
+                scrub: 1,
+                pin: true,
+                anticipatePin: 1,
+            },
+        });
+
+
     }, []);
 
     return (
         <>
-
             <div
                 className="absolute top-0 left-0 w-full h-full bg-[#EFF2E8] z-40"
                 ref={overlayRef}
                 style={{ transform: "scaleY(1)", transformOrigin: "top center" }}
             ></div>
 
-
             <section className="wrapper relative">
                 <div className="relative w-full h-screen z-20">
                     <Image src="/sample.jpg" alt="hero" fill className="object-cover yeah" />
 
                     <div className="absolute top-[22%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center px-4 sm:px-6 md:px-8 lg:px-0 w-full sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[45%] z-10 content">
-                        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl leading-tight sm:leading-tight md:leading-tight lg:leading-tight xl:leading-tight font-bold" style={{ fontFamily: "Proxima Nova Regular, sans-serif" }}>
+                        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl leading-tight font-bold" style={{ fontFamily: "Proxima Nova Regular, sans-serif" }}>
                             I deliver reliable, user-friendly websites and apps for real needs.
                         </h1>
-                        <p
-                            className="mt-4 sm:mt-6 md:mt-8 text-xs sm:text-xs md:text-xs uppercase tracking-widest text-slate-600">
+                        <p className="mt-4 sm:mt-6 md:mt-8 text-xs uppercase tracking-widest text-slate-600">
                             Tech Stacks
                         </p>
                         <div className="mt-2 sm:mt-4 md:mt-6">
@@ -105,21 +86,34 @@ const Hero = () => {
                     </div>
                 </div>
 
-                {/* Iframe container */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-black text-2xl font-bold z-30 w-full flex justify-center items-center px-4 sm:px-6 md:px-8 lg:px-0">
-                    <iframe
-                        src="https://www.youtube.com/embed/bAkNOmAlyLk?si=SJuT3NKl9Di4hzXI"
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        allowFullScreen
-                        className="video-frame transition-transform duration-300 w-full sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] h-[56.25vw] sm:h-[50.625vw] md:h-[45vw] lg:h-[39.375vw] xl:h-[34vw] max-w-[960px] max-h-[540px]"
+
+
+                {/* Refactored video container */}
+                <div
+                    className="video-container absolute top-1/6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 mx-auto px-4 sm:px-6 md:px-8 lg:px-0"
+                    ref={videoFrameRef}
+                    style={{
+                        opacity: 0,
+                        transform: "scale(0.3) rotateY(-15deg) translateY(100px)",
+                    }}
+                >
+
+
+                    <div
+                        className="video-glow absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-xl"
                         style={{
-                            transform: "scale(0)",
                             opacity: 0,
+                            transform: "scale(0.8)",
                         }}
-                    ></iframe>
+                    ></div>
+                    <VideoFrame />
+                </div>
+            </section>
+
+            <section id="about" className="horizontal-scroll-section h-screen overflow-hidden relative">
+                <div className="horizontal-wrapper flex h-full">
+                    <div className="panel w-[100vw] h-full bg-red-100 flex items-center justify-center">Panel 1</div>
+                    <div className="panel w-[100vw] h-full bg-green-100 flex items-center justify-center">Panel 2</div>
                 </div>
             </section>
         </>
