@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -9,9 +9,22 @@ import ReactLenis from "lenis/react";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
 import projectData from "@/constant/projectData";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 interface ProjectPageClientProps {
     project: typeof projectData[0];
+}
+
+interface ImageInfo {
+    src: string;
+    isPortrait: boolean;
+    aspectRatio: number;
 }
 
 const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
@@ -25,6 +38,47 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
     const isLaptop = useMediaQuery({ minWidth: 768, maxWidth: 1280 });
 
     const [distance, setDistance] = useState(0);
+    const [imageInfos, setImageInfos] = useState<ImageInfo[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Function to check image orientation and get aspect ratio
+    const getImageInfo = (src: string): Promise<ImageInfo> => {
+        return new Promise((resolve) => {
+            const img = new window.Image();
+            img.onload = () => {
+                const aspectRatio = img.width / img.height;
+                const isPortrait = aspectRatio < 1;
+                resolve({
+                    src,
+                    isPortrait,
+                    aspectRatio
+                });
+            };
+            img.onerror = () => {
+                // Fallback for failed images
+                resolve({
+                    src,
+                    isPortrait: false,
+                    aspectRatio: 16/9
+                });
+            };
+            img.src = getImageUrl(src);
+        });
+    };
+
+    // Load and analyze all images
+    useEffect(() => {
+        const loadImages = async () => {
+            if (project.secondWork?.images) {
+                const imagePromises = project.secondWork.images.map(getImageInfo);
+                const infos = await Promise.all(imagePromises);
+                setImageInfos(infos);
+                setIsLoading(false);
+            }
+        };
+        
+        loadImages();
+    }, [project]);
 
     useGSAP(() => {
         if (!project) return;
@@ -175,10 +229,73 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                             </div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 mt-12 sm:mt-16 md:mt-24 lg:mt-48">
-                            <div className="w-full border h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[80vh]"></div>
-                            <div className="w-full border h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[80vh]"></div>
-                            <div className="w-full border h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[80vh]"></div>
+                        {/* Dynamic Image Gallery with Swiper */}
+                        <div className="mt-12 sm:mt-16 md:mt-24 lg:mt-48">
+                            {!isLoading && project.secondWork?.images && (
+                                <Swiper
+                                    modules={[Navigation, Pagination, Autoplay]}
+                                    spaceBetween={20}
+                                    slidesPerView={1}
+                                    navigation={true}
+                                    pagination={{ clickable: true }}
+                                    autoplay={{
+                                        delay: 5000,
+                                        disableOnInteraction: false,
+                                    }}
+                                    breakpoints={{
+                                        640: {
+                                            slidesPerView: 2,
+                                            spaceBetween: 30,
+                                        },
+                                        1024: {
+                                            slidesPerView: 3,
+                                            spaceBetween: 40,
+                                        },
+                                    }}
+                                    className="project-swiper"
+                                >
+                                    {imageInfos.map((imageInfo, index) => (
+                                        <SwiperSlide key={index}>
+                                            <div 
+                                                className={`relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-105 ${
+                                                    imageInfo.isPortrait 
+                                                        ? 'h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh]' 
+                                                        : 'h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh]'
+                                                }`}
+                                                style={{
+                                                    width: imageInfo.isPortrait 
+                                                        ? 'auto' 
+                                                        : `${Math.min(100, Math.max(60, imageInfo.aspectRatio * 100))}%`
+                                                }}
+                                            >
+                                                <Image
+                                                    src={getImageUrl(imageInfo.src)}
+                                                    alt={`Project image ${index + 1}`}
+                                                    fill
+                                                    className="object-cover"
+                                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                                />
+                                                <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                                    <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg">
+                                                        <span className="text-sm font-medium text-gray-800">
+                                                            {imageInfo.isPortrait ? 'Portrait' : 'Landscape'} View
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            )}
+                            
+                            {/* Loading state */}
+                            {isLoading && (
+                                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10">
+                                    <div className="w-full border h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[80vh] animate-pulse bg-gray-300"></div>
+                                    <div className="w-full border h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[80vh] animate-pulse bg-gray-300"></div>
+                                    <div className="w-full border h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[80vh] animate-pulse bg-gray-300"></div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="mt-16 sm:mt-24 md:mt-32 lg:mt-64 flex flex-col lg:flex-row gap-8 lg:gap-16">
