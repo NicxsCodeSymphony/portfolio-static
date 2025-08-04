@@ -129,12 +129,12 @@ const Projects = () => {
                     </div>
 
                     {/* Content */}
-                    <div className="absolute inset-0 z-20 flex items-center px-12 w-1/2 ">
-                        <div className="space-y-4">
-                            <h1 className="text-white text-6xl font-extralight leading-20">
+                    <div className="absolute inset-0 z-20 flex items-center px-4 sm:px-6 md:px-8 lg:px-12 w-full md:w-3/4 lg:w-1/2">
+                        <div className="space-y-2 sm:space-y-3 md:space-y-4">
+                            <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extralight leading-tight sm:leading-relaxed md:leading-loose lg:leading-20">
                                 {project.title}
                             </h1>
-                            <p className="text-white/80 text-xl max-w-md">
+                            <p className="text-white/80 text-sm sm:text-base md:text-lg lg:text-xl max-w-xs sm:max-w-sm md:max-w-md">
                                 Project {index + 1} of {projectData.length}
                             </p>
                         </div>
