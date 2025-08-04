@@ -42,8 +42,8 @@ const Services = () => {
     }, { scope: containerRef });
 
     return (
-        <section className="min-h-[130vh] transition-colors duration-1000" ref={containerRef}>
-            <div className="px-4 md:px-20 2xl:px-64 py-20 md:py-36">
+        <section className="min-h-[130vh] transition-colors duration-1000 " ref={containerRef}>
+            <div className="px-4 md:px-20 2xl:px-64 py-20 md:py-36 bg-[#F7F3ED]">
                 <h1 className="animate-on-scroll text-4xl md:text-5xl lg:text-[6rem] font-bold text-center text-[#7F8166]">SERVICES</h1>
 
                 <div className="flex flex-col md:flex-row gap-12 mt-20">
