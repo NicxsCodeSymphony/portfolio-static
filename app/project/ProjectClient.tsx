@@ -92,7 +92,7 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                 duration: 0.8,
                 ease: "power4.in",
                 onComplete: () => {
-                    router.push("/");
+                    router.push("/project");
                     setTimeout(() => {
                         const element = document.getElementById("project");
                         if (element) element.scrollIntoView({ behavior: "smooth" });
@@ -116,7 +116,7 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                 onClick={handleClose}
                 className="absolute top-4 left-4 md:top-6 md:left-6 z-60 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110"
             >
-                <FaTimes className="text-black text-lg md:text-xl" />
+                <FaTimes className="text-white text-lg md:text-xl" />
             </button>
 
             {/* Smooth scrolling */}

@@ -6,7 +6,7 @@ import Projects from "@/components/Projects"
 export default function Home() {
   return (
       <ReactLenis root>
-      <main>
+      <main className="bg-[#F7F3ED]">
         <Hero />
           <About />
           <Projects />

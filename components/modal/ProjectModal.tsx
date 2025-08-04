@@ -88,7 +88,6 @@ const ProjectModal = ({ project, bounds, onClose }: ModalProps) => {
                     className="w-full h-full"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <div className="fixed inset-0 z-40 bg-black/50" />
                     <div className="relative w-full h-screen">
                         <Image
                             src={project.image}

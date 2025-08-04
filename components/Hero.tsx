@@ -49,7 +49,7 @@ const Hero = () => {
     return (
         <>
             <div
-                className="absolute top-0 left-0 w-full h-full bg-[#EFF2E8] z-40"
+                className="absolute top-0 left-0 w-full h-full z-40"
                 ref={overlayRef}
                 style={{ transform: "scaleY(1)", transformOrigin: "top center" }}
             ></div>
