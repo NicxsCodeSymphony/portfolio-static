@@ -92,13 +92,11 @@ const Hero = () => {
                     <Image src="/sample.jpg" alt="hero" fill className="object-cover yeah" />
 
                     <div className="absolute top-[22%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center px-4 sm:px-6 md:px-8 lg:px-0 w-full sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[45%] z-10 content">
-                        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl leading-tight sm:leading-tight md:leading-tight lg:leading-tight xl:leading-tight" style={{ fontFamily: "Inter, sans-serif" }}>
+                        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl leading-tight sm:leading-tight md:leading-tight lg:leading-tight xl:leading-tight font-bold" style={{ fontFamily: "Proxima Nova Regular, sans-serif" }}>
                             I deliver reliable, user-friendly websites and apps for real needs.
                         </h1>
                         <p
-                            className="mt-4 sm:mt-6 md:mt-8 text-xs sm:text-xs md:text-xs uppercase tracking-widest text-slate-300"
-                            style={{ fontFamily: "Courier New" }}
-                        >
+                            className="mt-4 sm:mt-6 md:mt-8 text-xs sm:text-xs md:text-xs uppercase tracking-widest text-slate-600">
                             Tech Stacks
                         </p>
                         <div className="mt-2 sm:mt-4 md:mt-6">
