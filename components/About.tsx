@@ -6,6 +6,8 @@ import gsap from "gsap";
 import Image from "next/image";
 import { useMediaQuery } from "react-responsive";
 
+import getImageUrl from "@/hook/googleDriveFile";
+
 gsap.registerPlugin(ScrollTrigger);
 
 const About = () => {
@@ -127,7 +129,7 @@ const About = () => {
                         {/* IMAGE CONTAINER */}
                         <div ref={imageRef} className="relative h-64 md:h-[65vh] w-full">
                             <Image
-                                src="/sample.jpg"
+                                src={getImageUrl('1h-V-40I3DzAKLIOp9XG--_qQfrlpCOyy')}
                                 alt="sample"
                                 fill
                                 className="object-cover rounded-xl"

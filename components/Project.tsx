@@ -10,6 +10,8 @@ import projectData from "@/constant/projectData";
 import { useRouter } from "next/navigation";
 import ProjectModal from "@/components/modal/ProjectModal";
 
+import getImageUrl from "@/hook/googleDriveFile";
+
 gsap.registerPlugin(ScrollTrigger);
 
 const Project = () => {
@@ -104,7 +106,7 @@ const Project = () => {
                         >
                             <div className="w-full h-[300px] md:h-[73vh] relative overflow-hidden rounded-xl">
                                 <Image
-                                    src={project.img}
+                                    src={getImageUrl(project.img)}
                                     alt="Project thumbnail"
                                     fill
                                     className="object-cover transition-transform duration-500 group-hover:scale-105"

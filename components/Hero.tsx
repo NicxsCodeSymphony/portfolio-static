@@ -4,7 +4,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import TechMarquee from "./ui/marquee";
-import {useEffect, useRef} from "react";
+import {useRef} from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -91,22 +91,24 @@ const Hero = () => {
         <div className="relative w-full h-screen z-20">
           <Image src="/sample.jpg" alt="hero" fill className="object-cover yeah" />
 
-          <div className="absolute top-[22%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center xl:w-[42%] z-10 content">
-            <h1 className="text-2xl md:text-5xl" style={{ fontFamily: "Inter, sans-serif" }}>
+          <div className="absolute top-[22%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center px-4 sm:px-6 md:px-8 lg:px-0 w-full sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[45%] z-10 content">
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl leading-tight sm:leading-tight md:leading-tight lg:leading-tight xl:leading-tight" style={{ fontFamily: "Inter, sans-serif" }}>
             I deliver reliable, user-friendly websites and apps for real needs.
             </h1>
             <p
-              className="mt-8 text-xs uppercase tracking-widest text-slate-300"
+              className="mt-4 sm:mt-6 md:mt-8 text-xs sm:text-xs md:text-xs uppercase tracking-widest text-slate-300"
               style={{ fontFamily: "Courier New" }}
             >
               Tech Stacks
             </p>
-            <TechMarquee />
+            <div className="mt-2 sm:mt-4 md:mt-6">
+              <TechMarquee />
+            </div>
           </div>
         </div>
 
         {/* Iframe container */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-black text-2xl font-bold z-30">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-black text-2xl font-bold z-30 w-full flex justify-center items-center px-4 sm:px-6 md:px-8 lg:px-0">
           <iframe
             src="https://www.youtube.com/embed/bAkNOmAlyLk?si=SJuT3NKl9Di4hzXI"
             title="YouTube video player"
@@ -114,7 +116,7 @@ const Hero = () => {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
-            className="video-frame transition-transform duration-300 w-[60vw] h-[34vw] max-w-[960px] max-h-[540px]"
+            className="video-frame transition-transform duration-300 w-full sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] h-[56.25vw] sm:h-[50.625vw] md:h-[45vw] lg:h-[39.375vw] xl:h-[34vw] max-w-[960px] max-h-[540px]"
             style={{
               transform: "scale(0)",
               opacity: 0,
