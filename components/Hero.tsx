@@ -44,21 +44,6 @@ const Hero = () => {
             .fromTo(".video-glow", { opacity: 0, scale: 0.8 }, { opacity: 0.6, scale: 1.1, ease: "power2.out", duration: 1.5 }, 2.5)
             .fromTo(".video-frame", { scale: 0.95, opacity: 0.8 }, { scale: 1, opacity: 1, ease: "power2.out", duration: 1 }, 3);
 
-
-        gsap.to(".horizontal-wrapper", {
-            xPercent: -300, // Scroll through 4 panels (0 to -300%)
-            ease: "none",
-            scrollTrigger: {
-                trigger: "#about",
-                start: "top top",
-                end: () => "+=" + document.querySelector(".horizontal-wrapper")!.scrollWidth,
-                scrub: 1,
-                pin: true,
-                anticipatePin: 1,
-            },
-        });
-
-
     }, []);
 
     return (
@@ -107,13 +92,6 @@ const Hero = () => {
                         }}
                     ></div>
                     <VideoFrame />
-                </div>
-            </section>
-
-            <section id="about" className="horizontal-scroll-section h-screen overflow-hidden relative">
-                <div className="horizontal-wrapper flex h-full">
-                    <div className="panel w-[100vw] h-full bg-red-100 flex items-center justify-center">Panel 1</div>
-                    <div className="panel w-[100vw] h-full bg-green-100 flex items-center justify-center">Panel 2</div>
                 </div>
             </section>
         </>
