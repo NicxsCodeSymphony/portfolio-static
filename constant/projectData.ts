@@ -1,6 +1,8 @@
 const projectData = [
     {
         title: "JourneyTrail: Onboard Bus Ticketing and Management System",
+        subtitle: "This is our capstone project featuring bus ticketing on board with printing mechanism and financial tracking",
+        description: "this is a sample description0",
         tags: ["Web App", "Mobile App"],
         image: "/cp3.jpg",
         techStack: {

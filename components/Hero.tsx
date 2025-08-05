@@ -8,12 +8,17 @@ import { useRef } from "react";
 import VideoFrame from "@/components/ui/youtube";
 import Link from "next/link";
 
+import {useHeroData} from "@/app/hooks/useHero";
+
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
     const overlayRef = useRef<HTMLDivElement>(null);
     const videoFrameRef = useRef<HTMLDivElement>(null);
     const scrollMessageRef = useRef<HTMLDivElement>(null);
+
+    const {data, loading, error} = useHeroData()
+    const heroData = data[0]
 
     useGSAP(() => {
         // Animate overlay
@@ -113,12 +118,12 @@ const Hero = () => {
 
                     {/* Main Content */}
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center px-4 sm:px-6 md:px-8 lg:px-0 w-full sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[45%] z-10 content flex flex-col items-center justify-center gap-6">
-                        <p className="mb-2 text-base sm:text-lg">Hi There!</p>
+                        <p className="mb-2 text-base sm:text-lg">{heroData?.subtitle}</p>
                         <h1
                             className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl leading-tight font-bold"
                             style={{ fontFamily: "Proxima Nova Regular, sans-serif" }}
                         >
-                            I&apos;m John Nico Edisan <br /> Website and Application Developer based in Cebu, Philippines
+                            I&apos;m {heroData?.personal[0]?.name} <br /> {heroData?.personal[0]?.position} based in Cebu, Philippines
                         </h1>
 
                         <div className="mt-2 sm:mt-4 md:mt-6 w-4/5">
@@ -129,13 +134,12 @@ const Hero = () => {
                         </div>
 
                         <div className="mt-24 xl:mt-72 2xl:mt-72 flex flex-wrap justify-center gap-4">
-                            <a
-                                href="/John-Nico-Edisan-CV.pdf"
-                                download
+                            <button
                                 className="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-3 rounded-full transition duration-300 shadow-md"
+                                onClick={() => window.open(`https://drive.google.com/file/d/${heroData?.cv}`)}
                             >
                                 Download CV
-                            </a>
+                            </button>
                             <Link
                                 href="/project"
                                 className="bg-neutral-700 hover:bg-neutral-800 text-white font-semibold px-6 py-3 rounded-full transition duration-300 shadow-md"

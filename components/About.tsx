@@ -6,12 +6,23 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import services from "@/constant/service";
 
+import {useAboutData} from '@/app/hooks/useAbout'
+import {useServiceData} from "@/app/hooks/useService";
+
+
 gsap.registerPlugin(ScrollTrigger);
 
 const About = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const [isMobile, setIsMobile] = useState(false);
+
+    const {data: about, loading: aboutLoading, error: aboutError} = useAboutData()
+    const {data: service, error: serviceError} = useServiceData()
+    const aboutData = about[0]
+    const serviceData = service[0]
+
+    console.log(service)
 
     // Check if device is mobile
     useEffect(() => {
@@ -57,23 +68,20 @@ const About = () => {
             >
                 {/* Panel 1 */}
                 <div className={`panel ${isMobile ? 'w-full min-h-screen' : 'w-screen h-full'} px-4 sm:px-6 md:px-10 lg:px-24 xl:px-48 text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold py-8 sm:py-12 md:py-16 lg:py-20 pb-20 sm:pb-24 md:pb-32 lg:pb-40`}>
-                    <h5 className="text-xs sm:text-sm md:text-base lg:text-lg">My Mission</h5>
+                    <h5 className="text-xs sm:text-sm md:text-base lg:text-lg">{aboutData?.subtitle1}</h5>
 
                     <div className="flex flex-col lg:flex-row justify-between items-start mt-6 sm:mt-8 md:mt-10 gap-6 sm:gap-8 md:gap-10 h-full">
                         {/* Left Text + Scroll Indicator */}
                         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between lg:w-3/5 gap-4">
                             <p className="font-extralight text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl leading-tight sm:leading-relaxed md:leading-loose lg:leading-normal">
-                                I create elevating digital experiences that inspire and connect
-                                with people through development and design
+                                {aboutData?.title}
                             </p>
                         </div>
 
                         {/* Right Text + Buttons */}
                         <div className="text-sm sm:text-base md:text-lg lg:text-xl lg:w-1/3 self-end">
                             <p className="font-extralight">
-                                From intuitive dashboards to immersive websites, we blend
-                                creativity with strategy to deliver elegant, user-centric
-                                solutions tailored to your brand&apos;s vision.
+                                {aboutData?.subtitle2}
                             </p>
 
                             <div className="flex flex-col sm:flex-row mt-16 sm:mt-24 md:mt-32 lg:mt-48 gap-4 sm:gap-6 md:gap-8 lg:gap-20 text-sm sm:text-base md:text-lg font-medium">
