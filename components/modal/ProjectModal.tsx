@@ -5,6 +5,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { FaTimes } from "react-icons/fa";
 import ReactLenis from 'lenis/react';
+import imageGoogleDrive from "@/hook/imageGoogleDrive";
 
 interface Project {
     title: string;
@@ -93,7 +94,7 @@ const ProjectModal = ({ project, bounds, onClose }: ModalProps) => {
                     <div className="relative w-full h-screen">
                         {(project.thumbnail || project.image) ? (
                             <Image
-                                src={project.thumbnail || project.image || ''}
+                                src={imageGoogleDrive(project.thumbnail || project.image || '')}
                                 alt="Project full image"
                                 fill
                                 className="object-cover w-full h-full"

@@ -11,6 +11,7 @@ import ProjectModal from "@/components/modal/ProjectModal";
 import Navbar from "@/components/Navbar";
 import { useProjectData } from "@/app/hooks/useProject";    
 import { ProjectData } from "@/constant/FirebaseData";
+import imageGoogleDrive from "@/hook/imageGoogleDrive";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,9 +25,6 @@ const Project = () => {
     const [modalBounds, setModalBounds] = useState<DOMRect | null>(null);
 
     const {data} = useProjectData();
-
-    console.log('Project data:', data);
-    console.log('First project tech:', data[0]?.tech);
 
     useEffect(() => {
         const moveCursor = (e: MouseEvent) => {
@@ -151,7 +149,7 @@ const Project = () => {
                             <div className="w-full h-[300px] md:h-[73vh] relative overflow-hidden rounded-xl">
                                 {project.thumbnail ? (
                                     <Image
-                                        src={project.thumbnail}
+                                        src={imageGoogleDrive(project.thumbnail)}
                                         alt="Project thumbnail"
                                         fill
                                         className="object-cover transition-transform duration-500 group-hover:scale-105"

@@ -12,6 +12,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import ClientOnly from "@/components/ui/ClientOnly";
 import { useSafeMediaQuery } from "@/app/hooks/useSafeMediaQuery";
+import durationDays from "@/hook/durationDays";
 
 // Import Swiper styles
 import 'swiper/css';
@@ -207,9 +208,6 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                                 >
                                     {project.title || 'Project Title'}
                                 </h2>
-                                <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl mt-4 text-center md:text-left opacity-80">
-                                    {project.subtitle || 'Project Subtitle'}
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -233,12 +231,12 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
 
                                 <div>
                                     <h4 className="text-sm sm:text-base md:text-lg font-semibold mb-2">Duration</h4>
-                                    <p className="text-xs sm:text-sm md:text-base">{project.start_date || 'N/A'} - {project.end_date || 'N/A'}</p>
+                                    <p className="text-xs sm:text-sm md:text-base">{durationDays(project?.start_date, project?.end_date)}</p>
                                 </div>
                             </div>
 
                             <div className="pt-1 text-sm sm:text-base md:text-lg lg:text-xl font-light w-full">
-                                <p className="text-justify lg:pr-36 leading-relaxed">{project.description || 'No description available.'}</p>
+                                <p className="text-justify lg:pr-36 leading-relaxed">{project.subtitle || 'No description available.'}</p>
                             </div>
                         </div>
 
@@ -335,25 +333,97 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                             </div>
                         </div>
 
-                        <div className="py-12 sm:py-16 md:py-24 lg:py-32 xl:py-48 px-4 sm:px-6 md:px-8 lg:px-10 rounded-xl">
-                            <h1 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-8 sm:mb-12 md:mb-16 lg:mb-20">Tech Stack</h1>
+                        <div
+                            className="py-12 sm:py-16 md:py-24 lg:py-32 xl:py-48 px-4 sm:px-6 md:px-8 lg:px-10 rounded-xl mx-auto"
+                            style={{ width: '80%' }}
+                        >
+                            <h1 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-8 sm:mb-12 md:mb-16 lg:mb-20">
+                                Tech Stack
+                            </h1>
 
-                            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
-                                {project.tech && Array.isArray(project.tech) && project.tech.length > 0 ? (
-                                    project.tech
-                                        .filter((tech: string) => typeof tech === 'string' && tech.trim() !== '')
-                                        .map((tech: string, index: number) => (
-                                            <div
-                                                key={index}
-                                                className="bg-[#2C274C] px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-base md:text-lg font-bold hover:scale-105 transition-transform duration-300"
-                                            >
-                                                {tech}
-                                            </div>
-                                        ))
-                                ) : (
-                                    <p className="text-gray-400 text-center">No tech stack information available.</p>
-                                )}
-                            </div>
+                            {project.tech && Array.isArray(project.tech) && project.tech.length > 0 ? (() => {
+                                // Create pairs of tech and type, filtering out empty values
+                                const techTypePairs = project.tech
+                                    .map((techItem, index) => ({
+                                        tech: techItem,
+                                        type: project.type?.[index] || 'tool' // fallback to tool if type is missing
+                                    }))
+                                    .filter(pair => pair.tech && pair.tech.trim());
+
+                                const groupedTech = {
+                                    frontend: techTypePairs.filter(item => item.type === 'frontend'),
+                                    backend: techTypePairs.filter(item => item.type === 'backend'),
+                                    tool: techTypePairs.filter(item => item.type === 'tool'),
+                                };
+
+                                const getWidthClass = (index: number) => {
+                                    const widths = ['w-2/5', 'w-1/2', 'w-3/5'];
+                                    return index === 0 ? 'w-2/5' : widths[Math.floor(Math.random() * widths.length)];
+                                };
+
+                                const getMarginClass = (index: number) => {
+                                    if (index === 0) return 'ml-0';
+                                    const margins = ['ml-4', 'ml-8', 'mr-4', 'mr-8'];
+                                    return margins[Math.floor(Math.random() * margins.length)];
+                                };
+
+                                return (
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6">
+                                        {/* Frontend Column */}
+                                        <div className="space-y-6">
+                                            <h4 className="text-2xl font-light mb-10">Frontend</h4>
+                                            {groupedTech.frontend.map((item, index) => (
+                                                <div
+                                                    key={`frontend-${index}`}
+                                                    className={`px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-base md:text-lg font-bold hover:scale-105 transition-transform duration-300 ${getWidthClass(index)} ${getMarginClass(index)}`}
+                                                    style={{
+                                                        backgroundColor: '#2C274C',
+                                                        marginTop: `${index * 20}px`,
+                                                    }}
+                                                >
+                                                    {item.tech}
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Backend Column */}
+                                        <div className="space-y-6">
+                                            <h4 className="text-2xl font-light mb-10">Backend</h4>
+                                            {groupedTech.backend.map((item, index) => (
+                                                <div
+                                                    key={`backend-${index}`}
+                                                    className={`px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-base md:text-lg font-bold hover:scale-105 transition-transform duration-300 ${getWidthClass(index)} ${getMarginClass(index)}`}
+                                                    style={{
+                                                        backgroundColor: '#1F382F',
+                                                        marginTop: `${index * 20}px`,
+                                                    }}
+                                                >
+                                                    {item.tech}
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Tools Column */}
+                                        <div className="space-y-6">
+                                            <h4 className="text-2xl font-light mb-10">Tools</h4>
+                                            {groupedTech.tool.map((item, index) => (
+                                                <div
+                                                    key={`tool-${index}`}
+                                                    className={`px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-base md:text-lg font-bold hover:scale-105 transition-transform duration-300 ${getWidthClass(index)} ${getMarginClass(index)}`}
+                                                    style={{
+                                                        backgroundColor: '#223643',
+                                                        marginTop: `${index * 20}px`,
+                                                    }}
+                                                >
+                                                    {item.tech}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            })() : (
+                                <p className="text-gray-400 text-center">No tech stack information available.</p>
+                            )}
                         </div>
                     </div>
                     <div>
