@@ -5,15 +5,18 @@ import gsap from "gsap";
 import {useGSAP} from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import {useRef, useState} from "react";
-import projectData from "@/constant/projectData";
 import imageGoogleDrive from "@/hook/imageGoogleDrive";
 import { useRouter } from "next/navigation";
 import ProjectModal from "@/components/modal/ProjectModal";
+import { useProjectData } from "@/app/hooks/useProject";
 
 
 gsap.registerPlugin(ScrollTrigger)
 
 const Projects = () => {
+
+    const {data: projectData, loading, error} = useProjectData()
+
     const containerRef = useRef<HTMLDivElement>(null);
     const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
     const [selectedProject, setSelectedProject] = useState<null | (typeof projectData)[0]>(null);
@@ -120,7 +123,7 @@ const Projects = () => {
                     {/* Background Image */}
                     <div className="h-full w-full relative">
                         <Image
-                            src={imageGoogleDrive(project.image)}
+                            src={imageGoogleDrive(project.thumbnail)}
                             alt={project.title}
                             fill
                             className="object-cover"

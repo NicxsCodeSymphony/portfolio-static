@@ -20,11 +20,8 @@ const About = () => {
     const {data: about, loading: aboutLoading, error: aboutError} = useAboutData()
     const {data: service, error: serviceError} = useServiceData()
     const aboutData = about[0]
-    const serviceData = service[0]
 
-    console.log(service)
 
-    // Check if device is mobile
     useEffect(() => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768); // 768px is the 'md' breakpoint
@@ -125,36 +122,43 @@ const About = () => {
 
                 {/* Panel 2 */}
                 <div className={`panel ${isMobile ? 'w-full' : 'w-[120vw] md:w-[120vw] sm:w-screen h-full'} flex flex-col sm:flex-row lg:flex-row text-lg sm:text-xl md:text-2xl lg:text-3xl ${isMobile ? '' : 'overflow-y-auto'}`}>
-                    {services.map((service) => (
-                        <div
-                            key={service.id}
-                            className={`group relative w-full sm:w-1/2 lg:w-1/4 xl:w-1/4 2xl:w-1/4 ${isMobile ? 'min-h-screen' : 'h-screen sm:h-full lg:h-full'} flex flex-col justify-between border-l border-black px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-10 hover:cursor-pointer hover:text-white transition-all duration-500 overflow-hidden`}
-                        >
-                            {/* Background Image */}
-                            <div className="absolute inset-0 z-0 overflow-hidden">
-                                <img
-                                    src={service.image}
-                                    alt={service.title}
-                                    className="w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out scale-110 group-hover:scale-100"
-                                />
-                                {/* Dark overlay for better text readability */}
-                                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-40 transition-opacity duration-700 ease-out"></div>
-                            </div>
+                    {service?.map((service, index) => {
 
-                            {/* Foreground content */}
-                            <div className="relative z-10 flex flex-col justify-between h-full">
-                                <h1 className="text-[3rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[10rem] 2xl:text-[14rem] leading-none sm:leading-tight md:leading-relaxed lg:leading-64 font-bold">
-                                    {service.id}
-                                </h1>
-                                <h5 className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-light">
-                                    {service.title}
-                                </h5>
-                                <p className="text-sm sm:text-base md:text-lg lg:text-base xl:text-lg 2xl:text-xl 2xl:w-3/4 w-full text-[#c0c0c0] hover:text-white">
-                                    {service.description}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
+                            return(
+                                <>
+                                    <div
+                                        key={index}
+                                        className={`group relative w-full sm:w-1/2 lg:w-1/4 xl:w-1/4 2xl:w-1/4 ${isMobile ? 'min-h-screen' : 'h-screen sm:h-full lg:h-full'} flex flex-col justify-between border-l border-black px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-10 hover:cursor-pointer hover:text-white transition-all duration-500 overflow-hidden`}
+                                    >
+                                        {/* Background Image */}
+                                        <div className="absolute inset-0 z-0 overflow-hidden">
+                                            <img
+                                                src={service.image}
+                                                alt={service.title}
+                                                className="w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out scale-110 group-hover:scale-100"
+                                            />
+                                            {/* Dark overlay for better text readability */}
+                                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-40 transition-opacity duration-700 ease-out"></div>
+                                        </div>
+
+                                        {/* Foreground content */}
+                                        <div className="relative z-10 flex flex-col justify-between h-full">
+                                            <h1 className="text-[3rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[10rem] 2xl:text-[14rem] leading-none sm:leading-tight md:leading-relaxed lg:leading-64 font-bold">
+                                                {index + 1}
+                                            </h1>
+                                            <h5 className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-light">
+                                                {service.title}
+                                            </h5>
+                                            <p className="text-sm sm:text-base md:text-lg lg:text-base xl:text-lg 2xl:text-xl 2xl:w-3/4 w-full text-[#c0c0c0] hover:text-white">
+                                                {service.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </>
+                            )
+                        }
+
+                    )}
                 </div>
 
             </div>
