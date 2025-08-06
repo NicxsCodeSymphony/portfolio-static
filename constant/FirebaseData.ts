@@ -40,3 +40,21 @@ export interface Services{
     description: string;
     link: string;
 }
+
+export interface ProjectData {
+    uid: string;
+    title: string;
+    subtitle: string;
+    role: string;
+    client: string;
+    description: string;
+    thumbnail: string;
+    project_url: string;
+    github_url: string;
+    images: string[];
+    tech: string[];
+    type: string[]
+    featured: string;
+    start_date: string;
+    end_date: string;
+}

@@ -8,8 +8,10 @@ import ReactLenis from 'lenis/react';
 
 interface Project {
     title: string;
-    tags: string[];
-    image: string;
+    tech?: string[];
+    tags?: string[];
+    thumbnail?: string;
+    image?: string;
 }
 
 interface ModalProps {
@@ -89,12 +91,18 @@ const ProjectModal = ({ project, bounds, onClose }: ModalProps) => {
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="relative w-full h-screen">
-                        <Image
-                            src={project.image}
-                            alt="Project full image"
-                            fill
-                            className="object-cover w-full h-full"
-                        />
+                        {(project.thumbnail || project.image) ? (
+                            <Image
+                                src={project.thumbnail || project.image || ''}
+                                alt="Project full image"
+                                fill
+                                className="object-cover w-full h-full"
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                                <span className="text-gray-500">No image available</span>
+                            </div>
+                        )}
                     </div>
                 </div>
             </ReactLenis>

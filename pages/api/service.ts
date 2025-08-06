@@ -30,7 +30,7 @@ const authenticate = async(req: NextApiRequest, res: NextApiResponse): Promise<b
 
 const handleGet = async (_req: NextApiRequest, res: NextApiResponse) => {
     try{
-        const heroSnaphot = await db.ref('services').once('value')
+        const heroSnaphot = await db.ref('service').once('value')
         const heroData = heroSnaphot.val() as Record<string, Omit<Services, 'uid'>> | null;
         const hero: Services[] = heroData
             ? Object.entries(heroData).map(([uid, data]) => ({uid, ...data})) : []

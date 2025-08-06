@@ -7,10 +7,11 @@ import gsap from "gsap";
 import { FaTimes } from "react-icons/fa";
 import ReactLenis from "lenis/react";
 import { useRouter } from "next/navigation";
-import { useMediaQuery } from "react-responsive";
-import projectData from "@/constant/projectData";
+import { ProjectData } from "@/constant/FirebaseData";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import ClientOnly from "@/components/ui/ClientOnly";
+import { useSafeMediaQuery } from "@/app/hooks/useSafeMediaQuery";
 
 // Import Swiper styles
 import 'swiper/css';
@@ -18,7 +19,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 interface ProjectPageClientProps {
-    project: typeof projectData[0];
+    project: ProjectData & { uid: string };
 }
 
 interface ImageInfo {
@@ -34,8 +35,8 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
     const imageRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
 
-    const isMobile = useMediaQuery({ maxWidth: 767 });
-    const isLaptop = useMediaQuery({ minWidth: 768, maxWidth: 1280 });
+    const isMobile = useSafeMediaQuery('(max-width: 767px)');
+    const isLaptop = useSafeMediaQuery('(min-width: 768px) and (max-width: 1280px)');
 
     const [distance, setDistance] = useState(0);
     const [imageInfos, setImageInfos] = useState<ImageInfo[]>([]);
@@ -57,7 +58,7 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
             img.onerror = () => {
                 // Fallback for failed images
                 resolve({
-                    src,
+                    src: '/sample.jpg',
                     isPortrait: false,
                     aspectRatio: 16/9
                 });
@@ -69,16 +70,20 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
     // Load and analyze all images
     useEffect(() => {
         const loadImages = async () => {
-            if (project.secondWork?.images) {
-                const imagePromises = project.secondWork.images.map(getImageInfo);
+            if (project.images && Array.isArray(project.images) && project.images.length > 0) {
+                const imagePromises = project.images
+                    .filter(img => img && typeof img === 'string') 
+                    .map(getImageInfo);
                 const infos = await Promise.all(imagePromises);
                 setImageInfos(infos);
+                setIsLoading(false);
+            } else {
                 setIsLoading(false);
             }
         };
         
         loadImages();
-    }, [project]);
+    }, [project, getImageInfo]);
 
     useGSAP(() => {
         if (!project) return;
@@ -156,7 +161,10 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
         }
     };
 
-    const getImageUrl = (img: string) => {
+    const getImageUrl = (img: string | undefined) => {
+        if (!img) {
+            return '/sample.jpg'; // Fallback image
+        }
         if (!img.includes("/") && img.length >= 25) {
             return `https://drive.google.com/uc?export=view&id=${img}`;
         }
@@ -174,17 +182,19 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
             </button>
 
             {/* Smooth scrolling */}
-            <ReactLenis root>
-                <div ref={contentRef} className="w-full scrollbar-hide">
+            <ClientOnly>
+                <ReactLenis root>
+                    <div ref={contentRef} className="w-full scrollbar-hide">
 
                     {/* Fullscreen Image with Title */}
                     <div className="relative h-screen w-full border-[10px #000 solid]">
                         <div ref={imageRef} className="absolute inset-0 z-10">
                             <Image
-                                src={getImageUrl(project.image)}
+                                src={getImageUrl(project.thumbnail)}
                                 alt="Project full image"
                                 fill
                                 className="object-cover w-full h-full"
+                                priority
                             />
                         </div>
 
@@ -195,8 +205,11 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                                     ref={titleRef}
                                     className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-[6rem] font-extralight text-center md:text-left leading-tight  drop-shadow-lg"
                                 >
-                                    {project.title}
+                                    {project.title || 'Project Title'}
                                 </h2>
+                                <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl mt-4 text-center md:text-left opacity-80">
+                                    {project.subtitle || 'Project Subtitle'}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -210,29 +223,30 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                             <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 lg:gap-20 w-full">
                                 <div>
                                     <h4 className="text-sm sm:text-base md:text-lg font-semibold mb-2">Client</h4>
-                                    <p className="text-xs sm:text-sm md:text-base">Capstone Project</p>
+                                    <p className="text-xs sm:text-sm md:text-base">{project.client || 'N/A'}</p>
                                 </div>
 
                                 <div>
                                     <h4 className="text-sm sm:text-base md:text-lg font-semibold mb-2">Role</h4>
-                                    <p className="text-xs sm:text-sm md:text-base">Full Stack Developer</p>
+                                    <p className="text-xs sm:text-sm md:text-base">{project.role || 'N/A'}</p>
                                 </div>
 
                                 <div>
                                     <h4 className="text-sm sm:text-base md:text-lg font-semibold mb-2">Duration</h4>
-                                    <p className="text-xs sm:text-sm md:text-base">6 Months</p>
+                                    <p className="text-xs sm:text-sm md:text-base">{project.start_date || 'N/A'} - {project.end_date || 'N/A'}</p>
                                 </div>
                             </div>
 
                             <div className="pt-1 text-sm sm:text-base md:text-lg lg:text-xl font-light w-full">
-                                <p className="text-justify lg:pr-36 leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                                <p className="text-justify lg:pr-36 leading-relaxed">{project.description || 'No description available.'}</p>
                             </div>
                         </div>
 
                         {/* Dynamic Image Gallery with Swiper */}
                         <div className="mt-12 sm:mt-16 md:mt-24 lg:mt-48">
-                            {!isLoading && project.secondWork?.images && (
-                                <Swiper
+                            {!isLoading && project.images && Array.isArray(project.images) && project.images.length > 0 && imageInfos.length > 0 && (
+                                <ClientOnly>
+                                    <Swiper
                                     modules={[Navigation, Pagination, Autoplay]}
                                     spaceBetween={20}
                                     slidesPerView={1}
@@ -285,7 +299,8 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                                             </div>
                                         </SwiperSlide>
                                     ))}
-                                </Swiper>
+                                    </Swiper>
+                                </ClientOnly>
                             )}
                             
                             {/* Loading state */}
@@ -323,76 +338,29 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                         <div className="py-12 sm:py-16 md:py-24 lg:py-32 xl:py-48 px-4 sm:px-6 md:px-8 lg:px-10 rounded-xl">
                             <h1 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-8 sm:mb-12 md:mb-16 lg:mb-20">Tech Stack</h1>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12 lg:gap-16">
-                                {/* Frontend */}
-                                <div className="rounded-lg p-4 sm:p-6 md:p-8 lg:p-10 hover:shadow-xl transition-shadow duration-300">
-                                    <h4 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6">Frontend</h4>
-                                    <ul className="relative min-h-[200px] sm:min-h-[250px] md:min-h-[300px] lg:min-h-[350px]">
-                                        {project.techStack?.frontend?.map((tech, index) => (
-                                            <li
+                            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
+                                {project.tech && Array.isArray(project.tech) && project.tech.length > 0 ? (
+                                    project.tech
+                                        .filter((tech: string) => typeof tech === 'string' && tech.trim() !== '')
+                                        .map((tech: string, index: number) => (
+                                            <div
                                                 key={index}
-                                                className="bg-[#2C274C] px-3 sm:px-4 md:px-5 py-3 sm:py-4 md:py-6 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-bold absolute transform -translate-x-1/2"
-                                                style={{
-                                                    width: isMobile ? '80%' : tech.width,
-                                                    left: isMobile ? '50%' : `${50 + (index * 15)}%`,
-                                                    top: isMobile ? `${index * 60}px` : `${index * 80}px`,
-                                                    zIndex: project.techStack?.frontend?.length - index
-                                                }}
+                                                className="bg-[#2C274C] px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-base md:text-lg font-bold hover:scale-105 transition-transform duration-300"
                                             >
-                                                {tech.name}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-
-                                {/* Backend */}
-                                <div className="rounded-lg p-4 sm:p-6 md:p-8 lg:p-10 hover:shadow-xl transition-shadow duration-300">
-                                    <h4 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6">Backend</h4>
-                                    <ul className="relative min-h-[200px] sm:min-h-[250px] md:min-h-[300px] lg:min-h-[350px]">
-                                        {project.techStack?.backend?.map((tech, index) => (
-                                            <li
-                                                key={index}
-                                                className="bg-[#1F382F] px-3 sm:px-4 md:px-5 py-3 sm:py-4 md:py-6 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-bold absolute transform -translate-x-1/2"
-                                                style={{
-                                                    width: isMobile ? '80%' : tech.width,
-                                                    left: isMobile ? '50%' : `${50 + (index * 15)}%`,
-                                                    top: isMobile ? `${index * 60}px` : `${index * 80}px`,
-                                                    zIndex: project.techStack?.backend?.length - index
-                                                }}
-                                            >
-                                                {tech.name}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-
-                                {/* Tools */}
-                                <div className="rounded-lg p-4 sm:p-6 md:p-8 lg:p-10 hover:shadow-xl transition-shadow duration-300 md:col-span-2 lg:col-span-1">
-                                    <h4 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6">Tools</h4>
-                                    <ul className="relative min-h-[200px] sm:min-h-[250px] md:min-h-[300px] lg:min-h-[350px]">
-                                        {project.techStack?.tools?.map((tech, index) => (
-                                            <li
-                                                key={index}
-                                                className="bg-[#223643] px-3 sm:px-4 md:px-5 py-3 sm:py-4 md:py-6 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-bold absolute transform -translate-x-1/2"
-                                                style={{
-                                                    width: isMobile ? '80%' : tech.width,
-                                                    left: isMobile ? '50%' : `${50 + (index * 15)}%`,
-                                                    top: isMobile ? `${index * 60}px` : `${index * 80}px`,
-                                                    zIndex: project.techStack?.tools?.length - index
-                                                }}
-                                            >
-                                                {tech.name}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                                {tech}
+                                            </div>
+                                        ))
+                                ) : (
+                                    <p className="text-gray-400 text-center">No tech stack information available.</p>
+                                )}
                             </div>
                         </div>
                     </div>
                     <div>
                     </div>
-                </div>
-            </ReactLenis>
+                                    </div>
+                </ReactLenis>
+            </ClientOnly>
         </div>
     );
 };

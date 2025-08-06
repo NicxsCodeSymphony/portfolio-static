@@ -6,10 +6,11 @@ import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowRight } from "react-icons/fa6";
-import projectData from "@/constant/projectData";
 import { useRouter } from "next/navigation";
 import ProjectModal from "@/components/modal/ProjectModal";
 import Navbar from "@/components/Navbar";
+import { useProjectData } from "@/app/hooks/useProject";    
+import { ProjectData } from "@/constant/FirebaseData";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,9 +20,13 @@ const Project = () => {
     const cursorRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const [isHovering, setIsHovering] = useState(false);
-    const [selectedProject, setSelectedProject] = useState<null | (typeof projectData)[0]>(null);
+    const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
     const [modalBounds, setModalBounds] = useState<DOMRect | null>(null);
-    const [projectIndex, setProjectIndex] = useState<number | null>(null);
+
+    const {data} = useProjectData();
+
+    console.log('Project data:', data);
+    console.log('First project tech:', data[0]?.tech);
 
     useEffect(() => {
         const moveCursor = (e: MouseEvent) => {
@@ -85,17 +90,16 @@ const Project = () => {
     }, []);
 
     const handleProjectClick = (
-        project: typeof projectData[0],
-        index: number,
+        project: ProjectData,
+        uid: string,
         e: React.MouseEvent
     ) => {
         const bounds = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
         setModalBounds(bounds);
         setSelectedProject(project);
-        setProjectIndex(index);
 
         setTimeout(() => {
-            router.push(`/project/${index}`);
+            router.push(`/project/${uid}`);
         }, 1000);
     };
 
@@ -136,25 +140,31 @@ const Project = () => {
                 </h1>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-20">
-                    {projectData.map((project, i) => (
+                    {data.map((project, i) => (
                         <div
                             key={i}
                             className="project group transition-transform duration-300 hover:scale-[1.02] hover:-translate-y-2 cursor-pointer"
                             onMouseEnter={() => setIsHovering(true)}
                             onMouseLeave={() => setIsHovering(false)}
-                            onClick={(e) => handleProjectClick(project, i, e)}
+                            onClick={(e) => handleProjectClick(project, project.uid, e)}
                         >
                             <div className="w-full h-[300px] md:h-[73vh] relative overflow-hidden rounded-xl">
-                                <Image
-                                    src={project.image}
-                                    alt="Project thumbnail"
-                                    fill
-                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                />
+                                {project.thumbnail ? (
+                                    <Image
+                                        src={project.thumbnail}
+                                        alt="Project thumbnail"
+                                        fill
+                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                                        <span className="text-gray-500">No image available</span>
+                                    </div>
+                                )}
                             </div>
                             <h4 className="mt-8 font-light text-2xl opacity-75">{project.title}</h4>
                             <ul className="flex gap-10 mt-6 text-xl opacity-45 list-disc mb-10">
-                                {project.tags.map((tag, j) => (
+                                {project.type && Array.isArray(project.type) && project.type.map((tag: string, j: number) => (
                                     <li key={j} className={j === 0 ? "list-none" : ""}>
                                         {tag}
                                     </li>
@@ -176,7 +186,6 @@ const Project = () => {
                             onClose={() => {
                                 setSelectedProject(null);
                                 setModalBounds(null);
-                                setProjectIndex(null);
                             }}
                         />
                     </div>
