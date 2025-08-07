@@ -15,7 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const snapshot = await db.ref(`projects/${uid}`).once('value');
-        console.log(snapshot)
         const data = snapshot.val() as Omit<ProjectData, 'uid'> | null;
 
         if (!data) {

@@ -17,90 +17,18 @@ body {
   url("https://db.onlinewebfonts.com/t/0376a58122a881d16a294512d3c947b1.svg#Proxima Nova Regular")format("svg");
 }
 
-/* Custom Swiper Styles */
-.project-swiper {
-  padding: 20px 0;
-}
-
-.project-swiper .swiper-slide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.project-swiper .swiper-button-next,
-.project-swiper .swiper-button-prev {
-  color: #ffffff;
-  background: rgba(0, 0, 0, 0.5);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-.project-swiper .swiper-button-next:hover,
-.project-swiper .swiper-button-prev:hover {
-  background: rgba(0, 0, 0, 0.7);
-  transform: scale(1.1);
-}
-
-.project-swiper .swiper-button-next::after,
-.project-swiper .swiper-button-prev::after {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.project-swiper .swiper-pagination-bullet {
-  background: rgba(255, 255, 255, 0.5);
-  opacity: 1;
-  transition: all 0.3s ease;
-}
-
-.project-swiper .swiper-pagination-bullet-active {
-  background: #ffffff;
-  transform: scale(1.2);
-}
-
-/* Enhanced Image Gallery Styles */
-.project-swiper .swiper-slide img {
-  transition: all 0.3s ease;
-}
-
-.project-swiper .swiper-slide:hover img {
-  transform: scale(1.05);
-}
-
-/* Responsive adjustments for image gallery */
-@media (max-width: 640px) {
-  .project-swiper {
-    padding: 10px 0;
-  }
-  
-  .project-swiper .swiper-button-next,
-  .project-swiper .swiper-button-prev {
-    width: 35px;
-    height: 35px;
-  }
-  
-  .project-swiper .swiper-button-next::after,
-  .project-swiper .swiper-button-prev::after {
-    font-size: 14px;
-  }
-}
-
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  .project-swiper .swiper-button-next,
-  .project-swiper .swiper-button-prev {
-    width: 35px;
-    height: 35px;
-  }
-  
-  .project-swiper .swiper-button-next::after,
-  .project-swiper .swiper-button-prev::after {
-    font-size: 14px;
-  }
+/* High-quality image rendering for project images */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: high-quality;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Scrollbar hide utility */

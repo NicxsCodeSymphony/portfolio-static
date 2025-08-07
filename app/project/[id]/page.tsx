@@ -1,6 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import ProjectPageClient from '../ProjectClient';
+import { TechItem } from '@/constant/FirebaseData';
 
 interface ProjectPageProps {
     params: Promise<{
@@ -26,19 +27,16 @@ async function getProject(id: string) {
         // Transform the data to ensure it matches our interface
         const transformedProject = {
             ...project,
-            // Ensure tech is always an array
+            // Ensure tech is always an array of TechItem objects
             tech: Array.isArray(project.tech) 
-                ? project.tech 
-                : project.tech && typeof project.tech === 'object'
-                ? Object.values(project.tech)
+                ? project.tech.map((item: unknown) => {
+                    if (typeof item === 'object' && item !== null && 'tech' in item) {
+                        return item as TechItem;
+                    }
+                    return { tech: String(item), type: 'tool' } as TechItem;
+                })
                 : [],
-            // Ensure images is always an array
-            images: Array.isArray(project.images) 
-                ? project.images 
-                : project.images && typeof project.images === 'object'
-                ? Object.values(project.images)
-                : [],
-            // Ensure other required fields have fallbacks
+            images: Array.isArray(project.images) ? project.images : [],
             title: project.title || 'Project Title',
             subtitle: project.subtitle || 'Project Subtitle',
             description: project.description || 'No description available.',
