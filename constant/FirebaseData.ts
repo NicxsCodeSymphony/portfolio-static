@@ -41,6 +41,16 @@ export interface Services{
     link: string;
 }
 
+export interface TechItem {
+    tech: string;
+    type: string;
+}
+
+export interface ProjectImage {
+    url: string;
+    size?: string;
+}
+
 export interface ProjectData {
     uid: string;
     title: string;
@@ -51,8 +61,8 @@ export interface ProjectData {
     thumbnail: string;
     project_url: string;
     github_url: string;
-    images: string[];
-    tech: string[];
+    images: ProjectImage[];
+    tech: TechItem[];
     type: string[]
     featured: string;
     start_date: string;

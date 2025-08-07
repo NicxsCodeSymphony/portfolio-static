@@ -6,12 +6,9 @@ import gsap from "gsap";
 import { FaTimes } from "react-icons/fa";
 import ReactLenis from 'lenis/react';
 import imageGoogleDrive from "@/hook/imageGoogleDrive";
+import { ProjectData } from "@/constant/FirebaseData";
 
-interface Project {
-    title: string;
-    tech?: string[];
-    tags?: string[];
-    thumbnail?: string;
+interface Project extends Pick<ProjectData, 'title' | 'thumbnail'> {
     image?: string;
 }
 
