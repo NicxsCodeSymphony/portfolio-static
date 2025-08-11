@@ -9,7 +9,7 @@ import ReactLenis from "lenis/react";
 import { useRouter } from "next/navigation";
 import { ProjectData, ProjectImage } from "@/constant/FirebaseData";
 import ClientOnly from "@/components/ui/ClientOnly";
-import { useSafeMediaQuery } from "@/app/hooks/useSafeMediaQuery";
+
 import durationDays from "@/hook/durationDays";
 
 interface ProjectPageClientProps {
@@ -27,13 +27,11 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
     const router = useRouter();
     const modalRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
-    const imageRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
 
-    const isMobile = useSafeMediaQuery('(max-width: 767px)');
-    const isLaptop = useSafeMediaQuery('(min-width: 768px) and (max-width: 1280px)');
 
-    const [distance, setDistance] = useState(0);
+
+
     const [imageInfos, setImageInfos] = useState<ImageInfo[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -188,8 +186,7 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
     useGSAP(() => {
         if (!project) return;
 
-        if (imageRef.current) gsap.set(imageRef.current, { y: 0 });
-        if (titleRef.current) gsap.set(titleRef.current, { opacity: 0, y: -50 });
+        if (titleRef.current) gsap.set(titleRef.current, { opacity: 0, y: 20 });
 
         const tl = gsap.timeline({ paused: true });
 
@@ -203,33 +200,12 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
             });
         }
 
-        if (imageRef.current && !isMobile) {
-            let animationDistance = 200;
-
-            if (titleRef.current) {
-                const titleHeight = titleRef.current.offsetHeight;
-                const titleTop = titleRef.current.offsetTop;
-                animationDistance = isLaptop
-                    ? titleTop + titleHeight + 50
-                    : titleTop + titleHeight + 30;
-                setDistance(animationDistance);
-            }
-
-            tl.fromTo(
-                imageRef.current,
-                { y: 0 },
-                { y: animationDistance, duration: 2, ease: "power3.out" },
-                "-=0.5"
-            );
-        }
-
         if (titleRef.current) {
             tl.to(
                 titleRef.current,
                 {
                     opacity: 1,
                     y: 0,
-                    scale: 1,
                     duration: 1.2,
                     ease: "power3.out",
                 },
@@ -340,7 +316,7 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                 >
                     <div ref={contentRef} className="w-full scrollbar-hide" style={{ scrollBehavior: 'smooth' }}>
                         <div className="relative h-screen w-full border-[10px #000 solid]">
-                            <div ref={imageRef} className="absolute inset-0 z-10">
+                            <div className="absolute inset-0 z-10">
                                 <Image
                                     src={getImageUrl(project.thumbnail)}
                                     alt="Project full image"
@@ -354,11 +330,13 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                                 />
                             </div>
 
-                            <div className="relative z-20 flex items-start justify-end h-full">
-                                <div className="p-4 md:p-6 max-w-6xl mx-auto md:ml-[33.333333%] mt-20 lg:mt-40">
+                            <div className="absolute inset-0 z-20 pointer-events-none bg-black/40"></div>
+
+                            <div className="relative z-30 flex items-end h-full">
+                                <div className="p-4 md:p-6 md:p-8 lg:p-12 xl:p-16">
                                     <h2
                                         ref={titleRef}
-                                        className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-[6rem] font-extralight text-center md:text-left leading-tight drop-shadow-lg"
+                                        className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-[6rem] font-extralight text-left leading-tight drop-shadow-lg"
                                     >
                                         {project.title || 'Project Title'}
                                     </h2>
@@ -367,8 +345,7 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                         </div>
 
                         <div
-                            className="relative z-30 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-40 pb-12 sm:pb-16 md:pb-24 lg:pb-32 xl:pb-48"
-                            style={{ marginTop: `${distance + 60}px` }}
+                            className="relative z-30 mt-10 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-40 pb-12 sm:pb-16 md:pb-24 lg:pb-32 xl:pb-48"
                         >
                             <div className="flex flex-col lg:flex-row justify-between w-full gap-8 lg:gap-20">
                                 <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 lg:gap-20 w-full">

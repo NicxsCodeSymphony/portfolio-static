@@ -29,6 +29,8 @@ const Projects = () => {
 
     const featuredProjects = projectData?.filter(project => project.featured) || [];
 
+    console.log(projectData)
+
     useGSAP(() => {
         if (!containerRef.current || featuredProjects.length === 0) return;
 
@@ -98,7 +100,7 @@ const Projects = () => {
         setProjectIndex(index);
 
         setTimeout(() => {
-            router.push(`/project/${index}`);
+            router.push(`/project/${project.uid}`);
         }, 1000);
     };
 

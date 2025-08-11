@@ -10,7 +10,7 @@ const VideoFrame = () => {
             {/* Inner container */}
             <div className="relative bg-black rounded-xl overflow-hidden shadow-2xl">
                 <iframe
-                    src="https://www.youtube.com/embed/bAkNOmAlyLk?si=SJuT3NKl9Di4hzXI"
+                    src="https://www.youtube.com/embed/RKcMzL3kF6k?si=f-VSD-8yz-zR4oGH"
                     title="YouTube video player"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
