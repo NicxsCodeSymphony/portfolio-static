@@ -464,7 +464,7 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                                 src={imageInfo.src}
                                 alt={`Project image ${index + 1}`}
                                 fill
-                                className="w-full h-full object-contain transition-all duration-500 group-hover:scale-110"
+                                className="w-full h-full object-contain transition-all duration-500 group-hover:scale-110 rounded-4xl"
                                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 70vw"
                                 quality={95}
                                 placeholder="blur"
