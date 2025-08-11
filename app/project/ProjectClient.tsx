@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 import ReactLenis from "lenis/react";
 import { useRouter } from "next/navigation";
 import { ProjectData, ProjectImage } from "@/constant/FirebaseData";
@@ -301,6 +301,33 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
             >
                 <FaTimes className="text-white text-lg md:text-xl" />
             </button>
+
+            {/* Project Links - Upper Right */}
+            <div className="absolute top-4 right-4 md:top-6 md:right-6 z-60 flex gap-2">
+                {project.github_url && (
+                    <button
+                        className="px-3 py-2 sm:px-4 sm:py-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white transition-all duration-300 hover:scale-110 flex items-center gap-2 text-sm"
+                        onClick={() => window.open(project.github_url, '_blank')}
+                    >
+                        <FaGithub className="text-base" />
+                        <span className="hidden sm:inline">GitHub</span>
+                    </button>
+                )}
+                
+                {project.project_url && (
+                   <button
+                   className="px-3 py-2 sm:px-4 sm:py-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white transition-all duration-300 hover:scale-110 flex items-center gap-2 text-sm"
+                   onClick={() => {
+                       const url = project?.project_url.replace(/^\/?project\//, ''); 
+                       window.open(url.startsWith('http') ? url : `https://${url}`, '_blank');
+                   }}
+               >
+                   <FaExternalLinkAlt className="text-base" />
+                   <span className="hidden sm:inline">Live Demo</span>
+               </button>
+               
+                )}
+            </div>
 
             <ClientOnly>
                 <ReactLenis 

@@ -12,6 +12,7 @@ import { useProjectData } from "@/app/hooks/useProject";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -150,6 +151,7 @@ const Projects = () => {
                                 <p className="text-white/80 text-sm sm:text-base md:text-lg lg:text-xl max-w-xs sm:max-w-sm md:max-w-md">
                                     Project {index + 1} of {featuredProjects.length}
                                 </p>
+                                
                                 <Button 
                                     variant="outline" 
                                     className="mt-4 bg-white/10 border-white/30 text-white hover:bg-white/20 hover:border-white/50"
