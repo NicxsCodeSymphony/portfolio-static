@@ -212,7 +212,7 @@ const Hero = () => {
     return (
         <>
             <div
-                className="absolute top-0 left-0 w-full h-full z-40 bg-black"
+                className="absolute top-0 left-0 w-full h-full z-40 bg-[#E4F2DF]"
                 ref={overlayRef}
                 style={{ transform: "scaleY(1)", transformOrigin: "top center" }}
             ></div>
@@ -236,7 +236,7 @@ const Hero = () => {
                         <div className="absolute top-2/3 left-1/2 w-4 h-4 bg-white/30 transform rotate-12 opacity-60 animate-pulse delay-500"></div>
                     </div>
 
-                    <div ref={awardsContainerRef} className="absolute inset-0 z-30 pointer-events-none">
+                    <div ref={awardsContainerRef} className="absolute inset-0 z-30 pointer-events-none content">
                         {heroData?.awards && awardPositions.map((position, index) => {
                             const award = Object.values(heroData.awards as Record<string, Award>)[index];
                             const randomColor = awardColors[Math.floor(Math.random() * awardColors.length)];
@@ -466,7 +466,7 @@ const Hero = () => {
                 
                 ::-webkit-scrollbar-thumb {
                     background: rgba(255, 255, 255, 0.3);
-                    border-radius: 4px;
+                    border-radius: 4px; 
                 }
                 
                 ::-webkit-scrollbar-thumb:hover {

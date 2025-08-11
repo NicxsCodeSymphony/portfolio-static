@@ -21,6 +21,8 @@ const Contact = () => {
     const [message, setMessage] = useState("");
     const [foundThrough, setFoundThrough] = useState("");
     const [isTyping, setIsTyping] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const [conversationHistory, setConversationHistory] = useState<
         Array<{ response: string; answer: string }>
     >([]);
@@ -154,14 +156,41 @@ const Contact = () => {
         }
     };
 
-    const handleSubmit = () => {
-        alert(`Name: ${name}\nFound through: ${foundThrough}\nEmail: ${email}\nMessage: ${message}`);
-        setStep(0);
-        setName("");
-        setEmail("");
-        setMessage("");
-        setFoundThrough("");
-        setConversationHistory([]);
+    const handleSubmit = async () => {
+        setIsSubmitting(true);
+        setSubmitStatus('idle');
+
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    message,
+                    foundThrough,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                setSubmitStatus('success');
+                // Reset form after successful submission
+                setTimeout(() => {
+                    handleReset();
+                }, 3000);
+            } else {
+                setSubmitStatus('error');
+            }
+        } catch (error) {
+            console.error('Error sending email:', error);
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleReset = () => {
@@ -171,6 +200,7 @@ const Contact = () => {
         setMessage("");
         setFoundThrough("");
         setConversationHistory([]);
+        setSubmitStatus('idle');
     };
 
     if (step === 4) {
@@ -221,19 +251,45 @@ const Contact = () => {
                                     </CardContent>
                                 </Card>
                             </div>
+
+                            {/* Status Messages */}
+                            {submitStatus === 'success' && (
+                                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                                    <p className="text-green-800 font-medium">
+                                        ✅ Message sent successfully! Check your email for confirmation.
+                                    </p>
+                                </div>
+                            )}
+
+                            {submitStatus === 'error' && (
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                                    <p className="text-red-800 font-medium">
+                                        ❌ Failed to send message. Please try again.
+                                    </p>
+                                </div>
+                            )}
                         </CardContent>
                         
                         <div className="flex gap-4 mt-8 justify-center">
                             <Button
                                 onClick={handleSubmit}
-                                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full transition-colors"
+                                disabled={isSubmitting}
+                                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                Send Message
+                                {isSubmitting ? (
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                        Sending...
+                                    </div>
+                                ) : (
+                                    'Send Message'
+                                )}
                             </Button>
                             <Button
                                 variant="outline"
                                 onClick={handleReset}
-                                className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-full transition-colors border-gray-500"
+                                disabled={isSubmitting}
+                                className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-full transition-colors border-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 Start Over
                             </Button>
