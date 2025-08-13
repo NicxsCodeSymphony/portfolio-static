@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useScrollToSection } from "@/hook/useScrollToSection";
@@ -12,16 +12,26 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuLink } from "@/compon
 const NavBar = () => {
     const navRef = useRef<HTMLDivElement>(null);
     const hamburgerRef = useRef<HTMLDivElement>(null);
-    const navItemsRef = useRef<HTMLLIElement[]>([]);
+    const navItemsRef = useRef<HTMLDivElement[]>([]);
     const uShapeRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
+    const mobileMenuRef = useRef<HTMLDivElement>(null);
     const scrollToSection = useScrollToSection();
     const router = useRouter();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const addToRefs = (el: HTMLLIElement | null) => {
+    const addToRefs = (el: HTMLDivElement | null) => {
         if (el && !navItemsRef.current.includes(el)) {
             navItemsRef.current.push(el);
         }
+    };
+
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
+
+    const closeMobileMenu = () => {
+        setIsMobileMenuOpen(false);
     };
 
     const playOpeningAnimation = () => {
@@ -96,26 +106,39 @@ const NavBar = () => {
     const handleNavigation = (e: React.MouseEvent, href: string) => {
         e.preventDefault();
         
-        playClosingAnimation(() => {
+        if (window.innerWidth < 1024) {
+            closeMobileMenu();
             router.push(href);
-            setTimeout(() => {
-                playOpeningAnimation();
-            }, 100);
-        });
+        } else {
+            playClosingAnimation(() => {
+                router.push(href);
+                setTimeout(() => {
+                    playOpeningAnimation();
+                }, 100);
+            });
+        }
     };
 
     const handleSectionClick = (e: React.MouseEvent, sectionId: string) => {
         e.preventDefault();
         
-        playClosingAnimation(() => {
+        if (window.innerWidth < 1024) {
+            closeMobileMenu();
             scrollToSection(sectionId);
-            setTimeout(() => {
-                playOpeningAnimation();
-            }, 100);
-        });
+        } else {
+            playClosingAnimation(() => {
+                scrollToSection(sectionId);
+                setTimeout(() => {
+                    playOpeningAnimation();
+                }, 100);
+            });
+        }
     };
 
     useGSAP(() => {
+        // Only run desktop animations on larger screens
+        if (window.innerWidth < 1024) return;
+
         gsap.set(navItemsRef.current, { 
             opacity: 0, 
             y: 30,
@@ -204,9 +227,10 @@ const NavBar = () => {
 
     return (
         <>
+            {/* Desktop Overlay */}
             <div
                 ref={overlayRef}
-                className="fixed top-0 left-0 w-full h-full"
+                className="fixed top-0 left-0 w-full h-full hidden lg:block"
                 style={{ 
                     backgroundColor: "#E8F4FD", 
                     zIndex: 9999,
@@ -214,13 +238,81 @@ const NavBar = () => {
                 }}
             ></div>
 
+            {/* Mobile Menu Overlay */}
+            {isMobileMenuOpen && (
+                <div 
+                    className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+                    onClick={closeMobileMenu}
+                ></div>
+            )}
+
+            {/* Mobile Side Menu */}
+            <div
+                ref={mobileMenuRef}
+                className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 lg:hidden ${
+                    isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+                }`}
+            >
+                <div className="flex flex-col h-full p-8">
+                    <div className="flex justify-between items-center mb-12">
+                        <h1 className="text-2xl font-bold">NICXS</h1>
+                        <button
+                            onClick={closeMobileMenu}
+                            className="text-2xl font-bold text-gray-600 hover:text-black"
+                        >
+                            ×
+                        </button>
+                    </div>
+                    
+                    <nav className="flex flex-col space-y-8">
+                        <Button
+                            variant="ghost"
+                            onClick={(e) => handleSectionClick(e, "about")}
+                            className="text-left text-lg font-medium hover:text-gray-600 transition-colors duration-200 h-auto p-0 bg-transparent border-none"
+                        >
+                            About
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            onClick={(e) => handleSectionClick(e, "services")}
+                            className="text-left text-lg font-medium hover:text-gray-600 transition-colors duration-200 h-auto p-0 bg-transparent border-none"
+                        >
+                            Services
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            onClick={(e) => handleNavigation(e, "/")}
+                            className="text-left text-lg font-medium hover:text-gray-600 transition-colors duration-200 h-auto p-0 bg-transparent border-none"
+                        >
+                            Home
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            onClick={(e) => handleNavigation(e, "/project")}
+                            className="text-left text-lg font-medium hover:text-gray-600 transition-colors duration-200 h-auto p-0 bg-transparent border-none"
+                        >
+                            Projects
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            onClick={(e) => handleNavigation(e, "/contact")}
+                            className="text-left text-lg font-medium hover:text-gray-600 transition-colors duration-200 h-auto p-0 bg-transparent border-none"
+                        >
+                            Contact
+                        </Button>
+                    </nav>
+                </div>
+            </div>
+
+            {/* Main Navbar */}
             <div
                 ref={navRef}
                 className="flex justify-between h-16 fixed top-0 left-0 z-50 w-full cursor-pointer"
             >
                 <div className="w-full h-full"></div>
 
-                <div className="relative flex items-center justify-center h-full px-10">
+                {/* Desktop Navigation */}
+                <div className="relative hidden lg:flex items-center justify-center h-full px-10">
                     <div
                         ref={uShapeRef}
                         className="absolute inset-0 border-x rounded-b-full h-full pointer-events-none"
@@ -241,8 +333,8 @@ const NavBar = () => {
                         <div className="w-6 h-0.5 bg-black"></div>
                     </div>
 
-                    <NavigationMenu className="flex items-center gap-20 text-base font-bold z-10" style={{ fontFamily: "Proxima Nova Regular" }}>
-                        <NavigationMenuItem ref={addToRefs} style={{ transformOrigin: "center center" }}>
+                    <div className="flex items-center gap-20 text-base font-bold z-10" style={{ fontFamily: "Proxima Nova Regular" }}>
+                        <div ref={addToRefs} style={{ transformOrigin: "center center" }}>
                             <Button
                                 variant="ghost"
                                 onClick={(e) => handleSectionClick(e, "about")}
@@ -250,8 +342,8 @@ const NavBar = () => {
                             >
                                 About
                             </Button>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem ref={addToRefs} style={{ transformOrigin: "center center" }}>
+                        </div>
+                        <div ref={addToRefs} style={{ transformOrigin: "center center" }}>
                             <Button
                                 variant="ghost"
                                 onClick={(e) => handleSectionClick(e, "services")}
@@ -259,41 +351,50 @@ const NavBar = () => {
                             >
                                 Services
                             </Button>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem ref={addToRefs} className="text-3xl" style={{ transformOrigin: "center center" }}>
-                            <NavigationMenuLink asChild>
-                                <Link 
-                                    href="/" 
-                                    onClick={(e) => handleNavigation(e, "/")}
-                                    className="hover:text-gray-600 transition-colors duration-200"
-                                >
-                                    NICXS
-                                </Link>
-                            </NavigationMenuLink>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem ref={addToRefs} style={{ transformOrigin: "center center" }}>
-                            <NavigationMenuLink asChild>
-                                <Link 
-                                    href="/project" 
-                                    onClick={(e) => handleNavigation(e, "/project")}
-                                    className="hover:text-gray-600 transition-colors duration-200"
-                                >
-                                    Projects
-                                </Link>
-                            </NavigationMenuLink>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem ref={addToRefs} style={{ transformOrigin: "center center" }}>
-                            <NavigationMenuLink asChild>
-                                <Link 
-                                    href="/contact" 
-                                    onClick={(e) => handleNavigation(e, "/contact")}
-                                    className="hover:text-gray-600 transition-colors duration-200"
-                                >
-                                    Contact
-                                </Link>
-                            </NavigationMenuLink>
-                        </NavigationMenuItem>
-                    </NavigationMenu>
+                        </div>
+                        <div ref={addToRefs} className="text-3xl" style={{ transformOrigin: "center center" }}>
+                            <Button
+                                variant="ghost"
+                                onClick={(e) => handleNavigation(e, "/")}
+                                className="hover:text-gray-600 transition-colors duration-200 h-auto text-base text-3xl bg-transparent border-none p-0 cursor-pointer font-bold"
+                            >
+                                NICXS
+                            </Button>
+                        </div>
+                        <div ref={addToRefs} style={{ transformOrigin: "center center" }}>
+                            <Button
+                                variant="ghost"
+                                onClick={(e) => handleNavigation(e, "/project")}
+                                className="hover:text-gray-600 transition-colors duration-200 h-auto text-base bg-transparent border-none p-0 cursor-pointer font-bold"
+                            >
+                                Projects
+                            </Button>
+                        </div>
+                        <div ref={addToRefs} style={{ transformOrigin: "center center" }}>
+                            <Button
+                                variant="ghost"
+                                onClick={(e) => handleNavigation(e, "/contact")}
+                                className="hover:text-gray-600 transition-colors duration-200 h-auto text-base bg-transparent border-none p-0 cursor-pointer font-bold"
+                            >
+                                Contact
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Mobile Navigation */}
+                <div className="flex lg:hidden items-center justify-center h-full px-6 w-full">
+                    <div className="flex-1"></div>
+                    <div className="flex-1 flex justify-end">
+                        <button
+                            onClick={toggleMobileMenu}
+                            className="flex flex-col items-center justify-center gap-1 p-2"
+                        >
+                            <div className="w-5 h-0.5 bg-black"></div>
+                            <div className="w-5 h-0.5 bg-black"></div>
+                            <div className="w-5 h-0.5 bg-black"></div>
+                        </button>
+                    </div>
                 </div>
 
                 <div className="w-full h-full"></div>
