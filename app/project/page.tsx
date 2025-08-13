@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import ReactLenis from "lenis/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -156,6 +157,18 @@ const Project = () => {
                 ref={containerRef}
             >
                 <Navbar />
+
+                <ReactLenis 
+                    root 
+                    options={{
+                        duration: 1.2,
+                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                        smoothWheel: true,
+                        wheelMultiplier: 0.8,
+                        touchMultiplier: 2,
+                        infinite: false,
+                    }}
+                >
                 <div
                     ref={cursorRef}
                     className={`pointer-events-none fixed z-50 flex flex-col items-center justify-center transition-all duration-200 ${
@@ -224,6 +237,8 @@ const Project = () => {
                         ))}
                     </div>
                 </div>
+
+                </ReactLenis>
 
                 {selectedProject && (
                     <>

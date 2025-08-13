@@ -267,15 +267,15 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
         };
 
         const renderTechColumn = (title: string, items: { tech: string; type: string }[], bgColor: string) => (
-            <div className="space-y-6">
-                <h4 className="text-2xl font-light mb-10">{title}</h4>
+            <div className="space-y-4 sm:space-y-6">
+                <h4 className="text-lg sm:text-xl md:text-2xl font-light mb-6 sm:mb-8 md:mb-10">{title}</h4>
                 {items.map((item, index) => (
                     <div
                         key={`${title.toLowerCase()}-${index}`}
-                        className={`px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-sm sm:text-base md:text-lg font-bold hover:scale-105 transition-transform duration-300 ${getWidthClass(index)} ${getMarginClass(index)}`}
+                        className={`px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 rounded-lg sm:rounded-xl md:rounded-2xl text-xs sm:text-sm md:text-base lg:text-lg font-bold hover:scale-105 transition-transform duration-300 ${getWidthClass(index)} ${getMarginClass(index)}`}
                         style={{
                             backgroundColor: bgColor,
-                            marginTop: `${index * 20}px`,
+                            marginTop: `${index * 15}px`,
                         }}
                     >
                         {item.tech}
@@ -360,10 +360,10 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                             <div className="absolute inset-0 z-20 pointer-events-none bg-black/40"></div>
 
                             <div className="relative z-30 flex items-end h-full">
-                                <div className="p-4 md:p-6 md:p-8 lg:p-12 xl:p-16">
+                                <div className="p-4 sm:p-6 md:p-8 lg:p-12 xl:p-16">
                                     <h2
                                         ref={titleRef}
-                                        className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-[6rem] font-extralight text-left leading-tight drop-shadow-lg"
+                                        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-[6rem] font-extralight text-left leading-tight drop-shadow-lg"
                                     >
                                         {project.title || 'Project Title'}
                                     </h2>
@@ -372,23 +372,23 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                         </div>
 
                         <div
-                            className="relative z-30 mt-10 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-40 pb-12 sm:pb-16 md:pb-24 lg:pb-32 xl:pb-48"
+                            className="relative z-30 mt-6 sm:mt-8 md:mt-10 lg:mt-10 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-40 pb-8 sm:pb-12 md:pb-16 lg:pb-24 xl:pb-32 2xl:pb-48"
                         >
-                            <div className="flex flex-col lg:flex-row justify-between w-full gap-8 lg:gap-20">
-                                <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 lg:gap-20 w-full">
+                            <div className="flex flex-col lg:flex-row justify-between w-full gap-6 sm:gap-8 md:gap-12 lg:gap-20">
+                                <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 md:gap-12 lg:gap-20 w-full">
                                     <div>
                                         <h4 className="text-sm sm:text-base md:text-lg font-semibold mb-2">Client</h4>
-                                        <p className="text-xs sm:text-sm md:text-base">{project.client || 'N/A'}</p>
+                                        <p className="text-sm sm:text-base md:text-lg">{project.client || 'N/A'}</p>
                                     </div>
 
                                     <div>
                                         <h4 className="text-sm sm:text-base md:text-lg font-semibold mb-2">Role</h4>
-                                        <p className="text-xs sm:text-sm md:text-base">{project.role || 'N/A'}</p>
+                                        <p className="text-sm sm:text-base md:text-lg">{project.role || 'N/A'}</p>
                                     </div>
 
                                     <div>
                                         <h4 className="text-sm sm:text-base md:text-lg font-semibold mb-2">Duration</h4>
-                                        <p className="text-xs sm:text-sm md:text-base">{durationDays(project?.start_date, project?.end_date)}</p>
+                                        <p className="text-sm sm:text-base md:text-lg">{durationDays(project?.start_date, project?.end_date)}</p>
                                     </div>
                                 </div>
 
@@ -397,33 +397,33 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                                 </div>
                             </div>
 
-                            <div className="mt-16 sm:mt-24 md:mt-32 lg:mt-64 py-16 sm:py-24 md:py-32 lg:py-48 -mx-4 sm:-mx-6 md:-mx-8 lg:-mx-16 xl:-mx-24 2xl:-mx-40">
+                            <div className="mt-8 sm:mt-12 md:mt-16 lg:mt-24 xl:mt-32 2xl:mt-64 py-8 sm:py-12 md:py-16 lg:py-24 xl:py-32 2xl:py-48 -mx-4 sm:-mx-6 md:-mx-8 lg:-mx-16 xl:-mx-24 2xl:-mx-40">
     {isLoading ? (
-        <div className="flex justify-center items-center h-96 sm:h-[32rem] md:h-[40rem] lg:h-[48rem]">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+        <div className="flex justify-center items-center h-64 sm:h-80 md:h-96 lg:h-[32rem] xl:h-[40rem] 2xl:h-[48rem]">
+            <div className="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 border-b-2 border-white"></div>
         </div>
     ) : imageInfos.length > 0 ? (
         <>
-            <div className="flex justify-center items-center gap-4 mb-8 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-40">
+            <div className="flex justify-center items-center gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-40">
                 <button
                     onClick={() => handleCarouselScroll('left')}
-                    className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-300 hover:scale-110"
+                    className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-300 hover:scale-110"
                 >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
                 
                 <button
                     onClick={toggleAutoPlay}
-                    className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-300 hover:scale-110"
+                    className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-300 hover:scale-110"
                 >
                     {autoPlay ? (
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     ) : (
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1M7 7h.01M17 7h.01M7 17h.01M17 17h.01" />
                         </svg>
                     )}
@@ -431,14 +431,14 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                 
                 <button
                     onClick={() => handleCarouselScroll('right')}
-                    className="p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-300 hover:scale-110"
+                    className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-300 hover:scale-110"
                 >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
-                    </button>
+                </button>
                 
-                <div className="text-sm text-gray-400 ml-4">
+                <div className="text-xs sm:text-sm text-gray-400 ml-2 sm:ml-4">
                     {imageInfos.length} images
                 </div>
             </div>
@@ -457,11 +457,11 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                     {imageInfos.map((imageInfo, index) => (
                         <div
                             key={index}
-                            className={`relative group overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl flex-shrink-0 h-[80vh] cursor-pointer ${
-                                imageInfo.size === 'web' ? 'w-[90vw] sm:w-[40vw] md:w-[60vw]' :
-                                imageInfo.size === 'mobile' ? 'w-[40vw] sm:w-[25vw] md:w-[25vw]' :
-                                imageInfo.size === 'tablet' ? 'w-[70vw] sm:w-[35vw] md:w-[35vw]' :
-                                'w-[90vw] sm:w-[40vw] md:w-[40vw]'
+                            className={`relative group overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl flex-shrink-0 h-[60vh] sm:h-[70vh] md:h-[75vh] lg:h-[80vh] cursor-pointer ${
+                                imageInfo.size === 'web' ? 'w-[85vw] sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[45vw]' :
+                                imageInfo.size === 'mobile' ? 'w-[35vw] sm:w-[30vw] md:w-[25vw] lg:w-[20vw] xl:w-[18vw]' :
+                                imageInfo.size === 'tablet' ? 'w-[60vw] sm:w-[50vw] md:w-[40vw] lg:w-[35vw] xl:w-[30vw]' :
+                                'w-[85vw] sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[45vw]'
                             }`}
                         >
                             <Image
@@ -469,7 +469,7 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                                 alt={`Project image ${index + 1}`}
                                 fill
                                 className="w-full h-full object-contain transition-all duration-500 group-hover:scale-110 rounded-4xl"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 70vw"
+                                sizes="(max-width: 640px) 85vw, (max-width: 768px) 70vw, (max-width: 1024px) 60vw, (max-width: 1280px) 50vw, 45vw"
                                 quality={95}
                                 placeholder="blur"
                                 blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
@@ -477,18 +477,18 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                             
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             
-                            <div className="absolute inset-0 flex flex-col justify-between p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                            <div className="absolute inset-0 flex flex-col justify-between p-2 sm:p-3 md:p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
                                 <div className="flex justify-between items-start">
-                                    <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium capitalize">
+                                    <span className="px-2 py-1 sm:px-3 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium capitalize">
                                         {imageInfo.size || 'web'}
                                     </span>
-                                    <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium">
+                                    <span className="px-2 py-1 sm:px-3 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium">
                                         {index + 1}/{imageInfos.length}
                                     </span>
                                 </div>
                                 
                                 <div className="text-white">
-                                    <p className="text-sm font-medium capitalize mb-1">
+                                    <p className="text-xs sm:text-sm font-medium capitalize mb-1">
                                         {imageInfo.size || 'web'} View
                                     </p>
                                     <p className="text-xs opacity-80">
@@ -502,11 +502,11 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                     {imageInfos.map((imageInfo, index) => (
                         <div
                             key={`duplicate-${index}`}
-                            className={`relative group overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl flex-shrink-0 h-[80vh] cursor-pointer ${
-                                imageInfo.size === 'web' ? 'w-[90vw] sm:w-[40vw] md:w-[60vw]' :
-                                imageInfo.size === 'mobile' ? 'w-[40vw] sm:w-[25vw] md:w-[25vw]' :
-                                imageInfo.size === 'tablet' ? 'w-[70vw] sm:w-[35vw] md:w-[35vw]' :
-                                'w-[90vw] sm:w-[40vw] md:w-[40vw]'
+                            className={`relative group overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl flex-shrink-0 h-[60vh] sm:h-[70vh] md:h-[75vh] lg:h-[80vh] cursor-pointer ${
+                                imageInfo.size === 'web' ? 'w-[85vw] sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[45vw]' :
+                                imageInfo.size === 'mobile' ? 'w-[35vw] sm:w-[30vw] md:w-[25vw] lg:w-[20vw] xl:w-[18vw]' :
+                                imageInfo.size === 'tablet' ? 'w-[60vw] sm:w-[50vw] md:w-[40vw] lg:w-[35vw] xl:w-[30vw]' :
+                                'w-[85vw] sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[45vw]'
                             }`}
                         >
                             <Image
@@ -514,7 +514,7 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                                 alt={`Project image ${index + 1} (loop)`}
                                 fill
                                 className="w-full h-full object-contain transition-all duration-500 group-hover:scale-110"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 70vw"
+                                sizes="(max-width: 640px) 85vw, (max-width: 768px) 70vw, (max-width: 1024px) 60vw, (max-width: 1280px) 50vw, 45vw"
                                 quality={95}
                                 placeholder="blur"
                                 blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
@@ -522,18 +522,18 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                             
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             
-                            <div className="absolute inset-0 flex flex-col justify-between p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                            <div className="absolute inset-0 flex flex-col justify-between p-2 sm:p-3 md:p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
                                 <div className="flex justify-between items-start">
-                                    <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium capitalize">
+                                    <span className="px-2 py-1 sm:px-3 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium capitalize">
                                         {imageInfo.size || 'web'}
                                     </span>
-                                    <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium">
+                                    <span className="px-2 py-1 sm:px-3 sm:py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium">
                                         {index + 1}/{imageInfos.length}
                                     </span>
                                 </div>
                                 
                                 <div className="text-white">
-                                    <p className="text-sm font-medium capitalize mb-1">
+                                    <p className="text-xs sm:text-sm font-medium capitalize mb-1">
                                         {imageInfo.size || 'web'} View
                                     </p>
                                     <p className="text-xs opacity-80">
@@ -547,29 +547,29 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
             </div>
         </>
     ) : (
-        <div className="text-center text-gray-400 py-32 sm:py-40 md:py-48 lg:py-56">
-            <p className="text-lg">No project images available</p>
+        <div className="text-center text-gray-400 py-16 sm:py-24 md:py-32 lg:py-40 xl:py-48 2xl:py-56">
+            <p className="text-base sm:text-lg">No project images available</p>
         </div>
     )}
 </div>
 
-                            <div className="mt-16 sm:mt-24 md:mt-32 lg:mt-64 flex flex-col lg:flex-row gap-8 lg:gap-16">
+                            <div className="mt-8 sm:mt-12 md:mt-16 lg:mt-24 xl:mt-32 2xl:mt-64 flex flex-col lg:flex-row gap-6 sm:gap-8 md:gap-12 lg:gap-16">
                                 <div className="w-full lg:w-1/2"></div>
                                 <div className="w-full lg:w-1/2">
                                     <h1 className="text-lg sm:text-xl md:text-2xl font-semibold">Project Description</h1>
                                     {project.description ? (
                                         project.description.split('|').map((paragraph, index) => (
                                             <div key={index}>
-                                                <p className="mt-6 sm:mt-8 md:mt-10 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
+                                                <p className="mt-4 sm:mt-6 md:mt-8 lg:mt-10 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
                                                     {paragraph.trim()}
                                                 </p>
                                                 {index < project.description.split('|').length - 1 && (
-                                                    <div className="h-6 sm:h-8 md:h-10"></div>
+                                                    <div className="h-4 sm:h-6 md:h-8 lg:h-10"></div>
                                                 )}
                                             </div>
                                         ))
                                     ) : (
-                                        <p className="mt-6 sm:mt-8 md:mt-10 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
+                                        <p className="mt-4 sm:mt-6 md:mt-8 lg:mt-10 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
                                             No description available for this project.
                                         </p>
                                     )}
@@ -577,10 +577,10 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                             </div>
 
                             <div
-                                className="py-12 sm:py-16 md:py-24 lg:py-32 xl:py-48 px-4 sm:px-6 md:px-8 lg:px-10 rounded-xl mx-auto"
-                                style={{ width: '80%' }}
+                                className="py-8 sm:py-12 md:py-16 lg:py-24 xl:py-32 2xl:py-48 px-4 sm:px-6 md:px-8 lg:px-10 rounded-xl mx-auto"
+                                style={{ width: '90%' }}
                             >
-                                <h1 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-8 sm:mb-12 md:mb-16 lg:mb-20">
+                                <h1 className="text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-light mb-6 sm:mb-8 md:mb-12 lg:mb-16 xl:mb-20">
                                     Tech Stack
                                 </h1>
                                 {renderTechStack()}

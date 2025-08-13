@@ -16,7 +16,7 @@ const VideoFrame = () => {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerPolicy="strict-origin-when-cross-origin"
                     allowFullScreen
-                    className="video-frame w-full sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] h-[56.25vw] sm:h-[50.625vw] md:h-[45vw] lg:h-[39.375vw] xl:h-[34vw] max-w-[960px] max-h-[540px] rounded-xl"
+                    className="video-frame w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] h-[53.4375vw] sm:h-[50.625vw] md:h-[45vw] lg:h-[39.375vw] xl:h-[34vw] max-w-[960px] max-h-[540px] rounded-xl"
                     style={{
                         transform: "scale(0.95)",
                         opacity: 0.8,

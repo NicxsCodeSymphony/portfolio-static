@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { useMediaQuery } from "react-responsive";
 
 import {useHeroData} from "@/app/hooks/useHero";
 import getImageUrl from "@/hook/imageGoogleDrive";
@@ -28,6 +29,9 @@ const Hero = () => {
     const videoFrameRef = useRef<HTMLDivElement>(null);
     const scrollMessageRef = useRef<HTMLDivElement>(null);
     const awardsContainerRef = useRef<HTMLDivElement>(null);
+    
+    // Media query to detect mobile devices
+    const isMobile = useMediaQuery({ maxWidth: 1023 });
 
     // Generate static grid positions for awards (left and right sides only)
     const getGridPosition = (index: number, totalAwards: number) => {
@@ -110,25 +114,27 @@ const Hero = () => {
         );
 
         // Animate awards entrance
-        gsap.fromTo(
-            ".award-item",
-            { 
-                opacity: 0, 
-                scale: 0, 
-                rotation: -180,
-                y: 50 
-            },
-            {
-                opacity: 1,
-                scale: 1,
-                rotation: 0,
-                y: 0,
-                duration: 1.5,
-                ease: "elastic.out(1, 0.3)",
-                stagger: 0.2,
-                delay: 1.5,
-            }
-        );
+        if (!isMobile) {
+            gsap.fromTo(
+                ".award-item",
+                { 
+                    opacity: 0, 
+                    scale: 0, 
+                    rotation: -180,
+                    y: 50 
+                },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    rotation: 0,
+                    y: 0,
+                    duration: 1.5,
+                    ease: "elastic.out(1, 0.3)",
+                    stagger: 0.2,
+                    delay: 1.5,
+                }
+            );
+        }
 
         const tl = gsap.timeline({
             scrollTrigger: {
@@ -195,18 +201,20 @@ const Hero = () => {
         );
 
         // Add floating animation to awards
-        gsap.to(".award-item", {
-            y: "random(-15, 15)",
-            rotation: "random(-5, 5)",
-            duration: "random(3, 6)",
-            ease: "sine.inOut",
-            repeat: -1,
-            yoyo: true,
-            stagger: {
-                amount: 2,
-                from: "random"
-            }
-        });
+        if (!isMobile) {
+            gsap.to(".award-item", {
+                y: "random(-15, 15)",
+                rotation: "random(-5, 5)",
+                duration: "random(3, 6)",
+                ease: "sine.inOut",
+                repeat: -1,
+                yoyo: true,
+                stagger: {
+                    amount: 2,
+                    from: "random"
+                }
+            });
+        }
     }, []);
 
     return (
@@ -237,7 +245,7 @@ const Hero = () => {
                     </div>
 
                     <div ref={awardsContainerRef} className="absolute inset-0 z-30 pointer-events-none content">
-                        {heroData?.awards && awardPositions.map((position, index) => {
+                        {!isMobile && heroData?.awards && awardPositions.map((position, index) => {
                             const award = Object.values(heroData.awards as Record<string, Award>)[index];
                             const randomColor = awardColors[Math.floor(Math.random() * awardColors.length)];
                             
@@ -332,7 +340,7 @@ const Hero = () => {
 
                     <div
                         ref={scrollMessageRef}
-                        className="scroll-message absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white text-sm sm:text-base bg-black/60 px-6 py-3 rounded-full backdrop-blur-md font-medium z-30 border  shadow-xl"
+                        className="scroll-message absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white text-base sm:text-base md:text-base bg-black/60 px-6 py-3 rounded-full backdrop-blur-md font-medium z-30 border shadow-xl"
                     >
                         <span className="flex items-center gap-2">
                             <span className="animate-bounce">↓</span>
@@ -345,13 +353,13 @@ const Hero = () => {
                         <CardContent className="p-0 flex flex-col items-center justify-center gap-6">
                             <div className="relative">
                                 <div className="absolute inset-0  rounded-lg blur-sm scale-110"></div>
-                                <p className="relative mb-2 text-base sm:text-lg px-4 py-2 rounded-lg ">{heroData?.subtitle}</p>
+                                <p className="relative mb-2 text-sm sm:text-base md:text-lg px-4 py-2 rounded-lg 2xl:mt-48">{heroData?.subtitle}</p>
                             </div>
                             
                             <div className="relative">
                                 <div className="absolute inset-0  rounded-xl blur-sm scale-105"></div>
                                 <h1
-                                    className="relative text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl leading-tight font-bold px-6 py-4 rounded-xl"
+                                    className="relative text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-6xl leading-tight font-bold px-6 py-4 rounded-xl"
                                     style={{ fontFamily: "Proxima Nova Regular, sans-serif" }}
                                 >
                                     I&apos;m {heroData?.personal[0]?.name} <br /> 
@@ -363,7 +371,7 @@ const Hero = () => {
 
                             <div className="mt-2 sm:mt-4 md:mt-6 w-4/5">
                                 <div className="mb-8 sm:mt-6 md:mt-8 flex justify-center">
-                                    <Badge variant="secondary" className="text-xs uppercase tracking-widest bg-black/40 text-white border-white/30 backdrop-blur-md shadow-lg">
+                                    <Badge variant="secondary" className="text-sm sm:text-xs uppercase tracking-widest bg-black/40 text-white border-white/30 backdrop-blur-md shadow-lg">
                                         Tech Stacks
                                     </Badge>
                                 </div>
@@ -375,7 +383,7 @@ const Hero = () => {
                             <div className="mt-24 xl:mt-72 2xl:mt-72 flex flex-wrap justify-center gap-4">
                                 <Button
                                     size="lg"
-                                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 border  backdrop-blur-md"
+                                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 border backdrop-blur-md text-sm sm:text-base"
                                     onClick={() => window.open(`https://drive.google.com/file/d/${heroData?.cv}`)}
                                 >
                                     Download CV
@@ -384,7 +392,7 @@ const Hero = () => {
                                     size="lg"
                                     variant="secondary"
                                     asChild
-                                    className="bg-gradient-to-r from-neutral-700 to-neutral-800 hover:from-neutral-800 hover:to-neutral-900 text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 border border-white/20 backdrop-blur-md"
+                                    className="bg-gradient-to-r from-neutral-700 to-neutral-800 hover:from-neutral-800 hover:to-neutral-900 text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 border border-white/20 backdrop-blur-md text-sm sm:text-base"
                                 >
                                     <Link href="/project">
                                         View Projects
@@ -396,7 +404,7 @@ const Hero = () => {
                 </div>
 
                 <div
-                    className="video-container absolute top-1/6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 mx-auto px-4 sm:px-6 md:px-8 lg:px-0"
+                    className="video-container absolute top-1/3 2xl:top-1/6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 mx-auto px-2 sm:px-4 md:px-6 lg:px-8 xl:px-0"
                     ref={videoFrameRef}
                     style={{
                         opacity: 0,
