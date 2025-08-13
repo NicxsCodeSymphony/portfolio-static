@@ -556,22 +556,23 @@ const ProjectPageClient = ({ project }: ProjectPageClientProps) => {
                             <div className="mt-16 sm:mt-24 md:mt-32 lg:mt-64 flex flex-col lg:flex-row gap-8 lg:gap-16">
                                 <div className="w-full lg:w-1/2"></div>
                                 <div className="w-full lg:w-1/2">
-                                    <h1 className="text-lg sm:text-xl md:text-2xl font-semibold">LOREM IPSUM DOLOR SIT AMET</h1>
-                                    <p className="mt-6 sm:mt-8 md:mt-10 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                    </p>
-
-                                    <div className="h-6 sm:h-8 md:h-10"></div>
-
-                                    <p className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                    </p>
-
-                                    <div className="h-6 sm:h-8 md:h-10"></div>
-
-                                    <p className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
-                                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                                    </p>
+                                    <h1 className="text-lg sm:text-xl md:text-2xl font-semibold">Project Description</h1>
+                                    {project.description ? (
+                                        project.description.split('|').map((paragraph, index) => (
+                                            <div key={index}>
+                                                <p className="mt-6 sm:mt-8 md:mt-10 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
+                                                    {paragraph.trim()}
+                                                </p>
+                                                {index < project.description.split('|').length - 1 && (
+                                                    <div className="h-6 sm:h-8 md:h-10"></div>
+                                                )}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="mt-6 sm:mt-8 md:mt-10 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
+                                            No description available for this project.
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 
