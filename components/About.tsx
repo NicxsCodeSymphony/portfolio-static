@@ -9,9 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import getImageUrl from "@/hook/imageGoogleDrive";
 
 import {useAboutData} from '@/app/hooks/useAbout'
 import {useServiceData} from "@/app/hooks/useService";
+import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -163,9 +165,10 @@ const About = () => {
                                     className={`service-card group relative w-full sm:w-1/2 lg:w-1/4 xl:w-1/4 2xl:w-1/4 h-screen sm:h-full lg:h-full flex flex-col justify-between border-l border-black px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-10 hover:cursor-pointer hover:text-white transition-all duration-500 overflow-hidden bg-transparent border-0 shadow-none`}
                                 >
                                     <div className="absolute inset-0 z-0 overflow-hidden">
-                                        <img
-                                            src={service.image}
-                                            alt={service.title}
+                                        <Image
+                                            src={getImageUrl(service.image)}
+                                            alt={service.image}
+                                            fill
                                             className="w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out scale-110 group-hover:scale-100"
                                         />
                                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-40 transition-opacity duration-700 ease-out"></div>
